@@ -1,0 +1,935 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Harvey&#39;s Notes</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2017-01-02T09:16:42.000Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>写代码，养成好习惯。</title>
+    <link href="http://yoursite.com/2016/03/21/%E5%86%99%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%85%BB%E6%88%90%E5%A5%BD%E4%B9%A0%E6%83%AF/"/>
+    <id>http://yoursite.com/2016/03/21/写代码，养成好习惯/</id>
+    <published>2016-03-20T19:49:46.000Z</published>
+    <updated>2017-01-02T09:16:42.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>先举数据，观察数据总结逻辑，在简单验证数据，这样比较保险！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;先举数据，观察数据总结逻辑，在简单验证数据，这样比较保险！&lt;/p&gt;
+
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yoursite.com/categories/Algorithm/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>一个面试题</title>
+    <link href="http://yoursite.com/2016/02/18/%E4%B8%80%E4%B8%AA%E9%9D%A2%E8%AF%95%E9%A2%98/"/>
+    <id>http://yoursite.com/2016/02/18/一个面试题/</id>
+    <published>2016-02-17T18:15:28.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>题目描述: 给定一个M * N的矩阵，提供一种操作，每次操作可以将每一行或列改变成X，问操作不超过K次能让矩阵的和最大变为多少？</p>
+<p>输入：矩阵，K，X，(M &lt; 11, N &lt; 200, K &lt; 1000)</p>
+<p>输出： 最大增加值</p>
+<p>举例：<br>|2 4 1|<br>|3 4 5|, K = 1, X = 3<br>显然把第一行改成3，能让矩阵边变的最大，答案是21。</p>
+<p>分析：<br>乍看到题目，可能被题目的行列操作吓到，因为很难确定行列之间的操作会有重叠元素，很难找到策略来分配行列操作。不要慌张，题目里面有个重要的隐藏条件，M &lt; 11，就是说最多只有11行，如果不能找到分配策略的话，可以用暴力的方法，可以枚举出对不同行的操作后，在进行列操作。对列的操作只用贪心就可以，每次找列和最小的列进行操作。枚举行操作有2^10<br>种，所以复杂度就是1024 <em> N </em> Log(N)。</p>
+<p>思路理清楚了，写下代码如下：</p>
+<p><pre>bool cmp(const long long a, const long long b) {</pre></p>
+<pre><code>return a &amp;gt; b;
+</code></pre><p>}</p>
+<p>long long getBitNum(long long n) {</p>
+<pre><code>long long res = 0;
+while(n != 0) {
+    n &amp;amp;= (n - 1);
+    res++;
+}
+return res;
+</code></pre><p>}</p>
+<p>int main() {<br>    long long h, w, x, k;<br>    cin &gt;&gt; h &gt;&gt; w &gt;&gt; x &gt;&gt; k;</p>
+<pre><code>long long rawSum = 0;
+long long res = 0;
+long long board[12][205];
+for(long long i = 0;i &amp;lt; h;i++) {
+    for(long long j = 0;j &amp;lt; w;j++) {
+        cin &amp;gt;&amp;gt; board[i][j];
+        rawSum += board[i][j];
+    }
+}
+res = rawSum;
+
+long long rowBitMax = 1;
+for(long long i = 0;i &amp;lt; h;i++) {
+    rowBitMax *= 2;
+}
+for(long long rowBit = 0;rowBit &amp;lt; rowBitMax;rowBit++) { 
+    long long opNum = getBitNum(rowBit); 
+    if (opNum &amp;gt; k) {
+        continue;
+    }
+
+    long long vVal[205];
+    memset(vVal, 0, sizeof(vVal));
+    for(long long j = 0;j &amp;lt; w;j++) {
+        for(long long i = 0;i &amp;lt; h;i++) {
+            vVal[j] += (x - board[i][j]);
+        }
+    }
+
+    long long sumIncre = 0;
+    long long bitMode = 1;
+    for(long long i = 0;i &amp;lt; h;i++) { 
+        if ((rowBit &amp;amp; bitMode) &amp;gt; 0) {
+            for(long long j = 0;j &amp;lt; w;j++) {
+                sumIncre += (x - board[i][j]);
+                vVal[j] -= (x - board[i][j]);
+            }
+        }
+        bitMode &amp;lt;&amp;lt;= 1;
+    }
+
+    // cout &amp;lt;&amp;lt; sumIncre &amp;lt;&amp;lt; endl;
+    sort(vVal, vVal + 200, cmp);
+    for(long long i = 0;i &amp;lt; (k - opNum) &amp;amp;&amp;amp; i &amp;lt; 200;i++) { 
+        if (vVal[i] &amp;gt; 0) {
+            sumIncre += vVal[i];
+        }
+    }
+    // cout &amp;lt;&amp;lt; sumIncre &amp;lt;&amp;lt; endl;
+    res = max(res, sumIncre + rawSum);
+}
+cout &amp;lt;&amp;lt; res &amp;lt;&amp;lt; endl;
+
+return 0;
+</code></pre><p>}<br><br>提交到OJ上，怎么搞都不对，最后都有点怀疑数据了，思路确认了没有问题，原因出在哪里呢？仔细审查代码之后发现一个重大问题，最后for(long long i = 0; i &lt; (k - opNum);i++) ，这一行中K可能很大，所以i可能超过200，存在数组越界的情况，改成for(long long i = 0;i &lt; (k - opNum) &amp;&amp; i &lt; 200;i++)，再提交，正确。</p>
+<p>这种bug很隐蔽，要非常小心数据的范围，程序不止是逻辑上正确，最终还是反映到对数据的处理上，如果不小心可能一盘好局全盘皆输。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;题目描述: 给定一个M * N的矩阵，提供一种操作，每次操作可以将每一行或列改变成X，问操作不超过K次能让矩阵的和最大变为多少？&lt;/p&gt;
+&lt;p&gt;输入：矩阵，K，X，(M &amp;lt; 11, N &amp;lt; 200, K &amp;lt; 1000)&lt;/p&gt;
+&lt;p&gt;输出： 最大增加值&lt;/
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yoursite.com/categories/Algorithm/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>2015年总结</title>
+    <link href="http://yoursite.com/2016/01/04/2015%E5%B9%B4%E6%80%BB%E7%BB%93/"/>
+    <id>http://yoursite.com/2016/01/04/2015年总结/</id>
+    <published>2016-01-04T04:54:38.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>&nbsp;</p>
+<p>2015年读完了研究生最后半年，前半年在学校宿舍，后半年在回龙观小区度过，11～12月在某司做后台开发工程师。</p>
+<h3 id="技术"><a href="#技术" class="headerlink" title="技术"></a>技术</h3><p>在学校的3～5月份，自己捣鼓了一下App，写了一个图片App，前段用的native code（java），后端用php + mysql，实现了一个基本的图片应用（<a href="http://115.28.13.176/shorpin/" target="_blank" rel="external">Link</a>）。</p>
+<p>在某司工作了一段时间，熟悉了Spring boot后台技术开发框架、模块，部署运维，以及敏捷开发的思想、流程。</p>
+<h3 id="读书"><a href="#读书" class="headerlink" title="读书"></a>读书</h3><p>一共购入了8本书，读完了5本，2本放弃，1本在读。读书量太少，一年最少要读20本，长篇书籍。</p>
+<p>放弃的2本是《三体》和《假如给我三天光明》，前一本读了1/3，故事情节太过想象化，故事情节不太有趣，个人感觉很糙，读到第二册放弃；后面一本是海伦的自传，主要是写海伦如何克服聋、失明的状况下学习文字的经历，读了一部分，深感生命力的倔强和顽强，不过后面有大量篇幅对自然景色的想象，这里应该是海伦对光明世界的渴望，但是很难用平常人习以为常的东西来吸引读者，读到约一半的地方，放弃。</p>
+<p>在读的一本是：《千家诗》</p>
+<p>年度最佳书：《撒哈拉的故事》，有感人的故事，有有趣的小事，有激烈的斗争，真实 &amp; 有趣。</p>
+<p>另外几本是：《巴黎圣母院》，《追风筝的人》，《飞鸟集》，《老人与海》</p>
+<h3 id="音乐"><a href="#音乐" class="headerlink" title="音乐"></a>音乐</h3><p>2015年最后一天买了一本《卡尔卡西古典吉他大教本》，之前也买了一本《吉他和弦大全》开始学习五线谱视奏。</p>
+<h3 id="大事件"><a href="#大事件" class="headerlink" title="大事件"></a>大事件</h3><p>7月份离开学校，7月20号离开学校，前一天吃了一次康博斯的鸡腿饭。</p>
+<p>8月份，大学的好兄弟结婚，去了一趟河南省，河南很穷，好兄弟依然。</p>
+<p><a href="http://115.28.13.176/blog/wp-content/uploads/2016/01/IMG_20150720_1419471.jpg" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2016/01/IMG_20150720_1419471-300x225.jpg" alt="IMG_20150720_141947"></a><a href="http://115.28.13.176/blog/wp-content/uploads/2016/01/IMG_20151205_1616281.jpg" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2016/01/IMG_20150720_142201-300x225.jpg" alt="IMG_20150720_142201"></a></p>
+<p><a href="http://115.28.13.176/blog/wp-content/uploads/2016/01/IMG_20151205_1616281.jpg" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2016/01/IMG_20151205_1616281-225x300.jpg" alt="IMG_20151205_161628"><img src="http://115.28.13.176/blog/wp-content/uploads/2016/01/IMG_20151218_181533-225x300.jpg" alt="IMG_20151218_181533"></a></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&amp;nbsp;&lt;/p&gt;
+&lt;p&gt;2015年读完了研究生最后半年，前半年在学校宿舍，后半年在回龙观小区度过，11～12月在某司做后台开发工程师。&lt;/p&gt;
+&lt;h3 id=&quot;技术&quot;&gt;&lt;a href=&quot;#技术&quot; class=&quot;headerlink&quot; title=&quot;技术&quot;&gt;&lt;/a&gt;技术&lt;
+    
+    </summary>
+    
+      <category term="Life" scheme="http://yoursite.com/categories/Life/"/>
+    
+    
+      <category term="年度总结" scheme="http://yoursite.com/tags/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>赠人玫瑰，手有余香</title>
+    <link href="http://yoursite.com/2015/11/18/%E8%B5%A0%E4%BA%BA%E7%8E%AB%E7%91%B0%EF%BC%8C%E6%89%8B%E6%9C%89%E4%BD%99%E9%A6%99/"/>
+    <id>http://yoursite.com/2015/11/18/赠人玫瑰，手有余香/</id>
+    <published>2015-11-17T17:54:14.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>从今天起，记录身边一些小故事，没有大道理，只是身边事情的记录而已。</p>
+<p>10.25号去公司报道，公司在三里屯，我住在回龙观，路线已经在网上找好，中间在芍药居换乘10号线，到团结湖站下车。早上起来的不早不晚，悠悠哒哒的上了地铁，中间从芍药居转了10号线，由于前一段懒散的生物钟，在地铁上还是瞌睡的要命，在车上的状态一直是打盹。</p>
+<p>然后，到了某站，乌泱泱上来一些人，其中一伙看起来是打工的一家人，拖着杂七杂八的行李，急急匆匆上地铁，拿着单程票，嘴里还在说着要到海淀黄庄下，</p>
+<p>“一，二，三。。。，还有四站到海淀黄庄”其中的一个用乡音跟另外一个说，另外的那个便坐到了我旁边。我听的很清楚，我心想，你们坐这趟车去海淀黄庄，不是搞笑吗？问题来了，我要不要友情提醒人家一下人，如果按照原来的我的标准去做事，一定是继续闭上眼打盹直到到站下车。</p>
+<p>不过这一次我没有，如果自己的一点小小的举动就能帮助别人很多，这是多么美妙的一件事情阿。于是，我便对旁边那位打工老人家疑问的说，“你们到海淀黄庄？（反问），这个不到海淀黄庄吧，”，</p>
+<p>老人家半信半疑地“阿“了一下，我立刻站了起来，看了一下列车线路指示灯，找到了海淀黄庄，但是更重要的是，发现团结湖在另一头，我坐反了。。于是站在车门口，等到下一站，箭一样冲下去。</p>
+<p>其实我本意是想帮一下外来的“客人”，没想到却帮了自己，有句话说的好，叫：“赠人玫瑰，手有余香”，这个故事不是正是在说这个道理吗？</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;从今天起，记录身边一些小故事，没有大道理，只是身边事情的记录而已。&lt;/p&gt;
+&lt;p&gt;10.25号去公司报道，公司在三里屯，我住在回龙观，路线已经在网上找好，中间在芍药居换乘10号线，到团结湖站下车。早上起来的不早不晚，悠悠哒哒的上了地铁，中间从芍药居转了10号线，由于前一段懒
+    
+    </summary>
+    
+      <category term="Life" scheme="http://yoursite.com/categories/Life/"/>
+    
+    
+      <category term="助人为乐" scheme="http://yoursite.com/tags/%E5%8A%A9%E4%BA%BA%E4%B8%BA%E4%B9%90/"/>
+    
+      <category term="小故事" scheme="http://yoursite.com/tags/%E5%B0%8F%E6%95%85%E4%BA%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>秋晨</title>
+    <link href="http://yoursite.com/2015/11/18/%E7%A7%8B%E6%99%A8/"/>
+    <id>http://yoursite.com/2015/11/18/秋晨/</id>
+    <published>2015-11-17T17:28:43.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>秋晨</strong></p>
+<p>银柳齐落落，路人稀松过。</p>
+<p>净空秋雨后，匆匆不能赏。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;秋晨&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;银柳齐落落，路人稀松过。&lt;/p&gt;
+&lt;p&gt;净空秋雨后，匆匆不能赏。&lt;/p&gt;
+
+    
+    </summary>
+    
+      <category term="Poem" scheme="http://yoursite.com/categories/Poem/"/>
+    
+    
+      <category term="秋" scheme="http://yoursite.com/tags/%E7%A7%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Srm667 DIV2</title>
+    <link href="http://yoursite.com/2015/09/26/Srm667%20DIV2/"/>
+    <id>http://yoursite.com/2015/09/26/Srm667 DIV2/</id>
+    <published>2015-09-26T15:27:05.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>这是掉到DIV2后的第二次比赛，本以为题目简单，但没想到又掉坑里。。。</p>
+<p><span class="Apple-style-span"><strong>第一题</strong></span>，在一个100 * 100的二维平面内找一个满足一个条件的点，无任何亮点，枚举即可。</p>
+<p><span class="Apple-style-span"><strong>第二题</strong></span>，初始情况下有一个空Cache，假设系统共有N个元素，用位表示法来表示，0表示第i个元素不存在，1表示存在，所以初始Cache就是是000… 000。</p>
+<p>接下来有M个操作，每次操作都会读取一些元素（例如，011表示用到了第2，3元素），如果数据在Cache中则消耗时间为0，如果不在Cache中，系统要将元素Cache进来，消耗的时间是[需取元素个数] ^ 2。问如何排列这M个操作消耗总时间最少，输出最少时间。N, M &lt;= 20。</p>
+<p><span class="Apple-style-span"><em>分析</em></span>：如果消耗时间是不是平方关系，只是线性关系，那么最后消耗时间就是最后Cache包含的元素个数，无所谓操作的序列了。但是，有平方关系就不一样了，由于每一次需要取的新元素个数是不一样的，平方之后会对最后结果产生影响,比如：有3个操作，分别要取1000, 1100, 0111，可以走1000 -&gt; 1100 -&gt;0111，结果就是1 ^ 2 + 1 ^ 2 + 2 ^ 2 = 6；也可以走0111-&gt; 1000 -&gt; 1100，结果就是3 ^ 2 + 1 ^ 2 = 10。</p>
+<p>显然不同操作顺序会影响最后的总消耗时间，题目的意思实际上就是拆成M项数字，让这M项的平方和最小。</p>
+<p>通过以上分析，有些读者可能会像到贪心的算法，就是每次尽量的少取新元素，这样分解的结果会是每一项都非常小，诈看是有道理的，但是犯了和笔者一样的问题，由于这里的操作并不能形成一个链，有许多分叉，操作之间有交叉关系，贪心眼前最优值并不能导致全局最优，比如序列:0011，1100，1110，11111。如果按贪心的来就是0011-&gt;1100-&gt;1110-&gt;1111，这样的结果是8，但是正确6。</p>
+<p>既然贪心不对，那么怎么做呢，观察到N &lt;= 20，可以暴力枚举每一种Cache状态的最少消耗时间，一共有2 ^ 20种Cache状态，DP[state] = DP[last_state] + newEle ^ 2。 last_state可以枚举当前的操作，所以时间复杂度是O(20 * 2 ^ 20)。</p>
+<p><pre class="cpp">class OrderOfOperationsDiv2 {<br>    public:</pre></p>
+<pre><code>int getOneNum(int num) {
+    int res = 0;
+    while(num) {
+        num &amp;amp;= (num - 1);
+        res++;
+    }
+
+    return res;
+}
+
+int getVal(string s) {
+    int res = 0;
+    for(int i = s.size() - 1;i &amp;gt;= 0;i--) {
+        res &amp;lt;&amp;lt;= 1;
+        if (s[i] == &apos;1&apos;)
+            res++;
+    }
+
+    return res;
+}
+
+int minTime(vector &amp;lt;string&amp;gt; s) {
+    int dp[1 &amp;lt;&amp;lt; 20];
+    memset(dp, -1, sizeof(dp));
+    dp[0] = 0;
+
+    int res = 0;
+    for(int i = 0;i &amp;lt; 1 &amp;lt;&amp;lt; 20;i++) {
+        if (dp[i] == -1)
+            continue;
+
+        for(int j = 0;j &amp;lt; s.size();j++) {
+            int sInt = getVal(s[j]);
+            int nextInt = sInt | i;
+            int oneNum = getOneNum(nextInt ^ i);
+
+            if (dp[nextInt] == -1)
+                dp[nextInt] = dp[i] + oneNum * oneNum;
+
+            // cout &amp;lt;&amp;lt; nextInt &amp;lt;&amp;lt; &quot; &quot; &amp;lt;&amp;lt; dp[nextInt] &amp;lt;&amp;lt; endl;
+            dp[nextInt] = min(dp[nextInt], dp[i] + oneNum * oneNum);
+            res = dp[nextInt];
+        }
+    }
+
+    return res;
+}
+</code></pre><p>};<br><strong>第三题</strong>，题目背景是一个如何最优地建造商店问题，N个地基排成一行，每个地基可以盖多层（意味着可以有多个商店），但是这个地基上的商店收益与左右地基中商店个数有关profit[x][y],x是该位置上的商店数，y是左右位置上的商店总数，最多可以建造M个商店。问如何建造商店能得到最大收益。M， N &lt;= 31。</p>
+<p><em>分析</em>：想一下最原始的顺序DP是怎么样的，从左向右顺序递推，dp[i][t] = dp[i - 1][s] + profit，但是这里除了左边，还要考虑右边。如果考虑其他方案可能比较都比较麻烦，这里有一种特别好的方法，就是拓展状态。既然右边需要考虑，那么就右边的建造数加到状态中，这样就能唯一状态了。所以，状态改成dp[i][t][r]，表示第i位上建造t个商店，并且右边有r个商店，前i个位置取得的最好的利益值。所以递推方程就是:</p>
+<p>dp[i][t][r] = dp[i – 1][l][t] + profit[l][r] { 0 =&lt; t &lt;= m, 0 =&lt; l &lt;= m }</p>
+<p>最终结果是max(dp[N – 1][t][0]), 时间复杂度是O(N * m ^ 3)。</p>
+<p><pre class="cpp">class ShopPositions {<br>    public:<br>    int maxProfit(int n, int m, vector &lt;int&gt; c) {<br>        int dp[31][31][31];<br>        memset(dp, 0, sizeof(dp));</pre></p>
+<pre><code>    for(int i = 0;i &amp;lt; n;i++) {
+        // 0 taco
+        if (i &amp;gt; 0) {
+            int maxVal = 0;
+            for(int j = 0;j &amp;lt;= m;j++) {
+                maxVal = max(maxVal, dp[i - 1][j][0]);
+            }
+            for(int j = 0;j &amp;lt;= m;j++) {
+                dp[i][0][j] = maxVal;
+            }
+        }
+
+        for(int j = 1;j &amp;lt;= m;j++) {
+            for(int l = 0;l &amp;lt;= m;l++) {
+                for(int r = 0;r &amp;lt;= m;r++) {
+                    if (i == 0)
+                        dp[i][j][r] = c[i * 3 * m + j + r- 1] * j;
+                    else
+                        dp[i][j][r] = max(dp[i][j][r], dp[i - 1][l][j] + c[i * 3 * m + j + l + r - 1] * j);
+                }
+            }
+        }
+    }
+
+    int res = 0;
+    for(int i = 0;i &amp;lt;= m;i++) {
+        res = max(res, dp[n - 1][i][0]);
+    }
+
+    return res;
+}
+</code></pre><p>};<br>作为一个程序设计者，最重要的就是分析能力，不管是算法，还是其他领域，对任何问题都要有剖开问题，重新组织的能力。这次比赛的后两道题都比较不错，第二题很容易想成贪心，而第三题又能训练对动态规划的状态的理解。</p>
+<p>有一些教训，就是当不确定算法是否正确的时候，可以通过“<strong>测试驱动</strong>”的方式来进行编程，多想测试用例能够去除掉具有显著错误的算法，这一点尤其在短时间内是有用的。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这是掉到DIV2后的第二次比赛，本以为题目简单，但没想到又掉坑里。。。&lt;/p&gt;
+&lt;p&gt;&lt;span class=&quot;Apple-style-span&quot;&gt;&lt;strong&gt;第一题&lt;/strong&gt;&lt;/span&gt;，在一个100 * 100的二维平面内找一个满足一个条件的点，无任何亮点
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yoursite.com/categories/Algorithm/"/>
+    
+    
+      <category term="SRM" scheme="http://yoursite.com/tags/SRM/"/>
+    
+      <category term="DP" scheme="http://yoursite.com/tags/DP/"/>
+    
+      <category term="测试驱动" scheme="http://yoursite.com/tags/%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8/"/>
+    
+      <category term="贪心" scheme="http://yoursite.com/tags/%E8%B4%AA%E5%BF%83/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>秋至</title>
+    <link href="http://yoursite.com/2015/09/06/%E7%A7%8B%E8%87%B3/"/>
+    <id>http://yoursite.com/2015/09/06/秋至/</id>
+    <published>2015-09-06T08:02:24.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>秋至</strong></p>
+<p>秋雨禁寒蝉，枫叶犹不知。</p>
+<p>落花去已远，尚有无忧时。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;秋至&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;秋雨禁寒蝉，枫叶犹不知。&lt;/p&gt;
+&lt;p&gt;落花去已远，尚有无忧时。&lt;/p&gt;
+
+    
+    </summary>
+    
+      <category term="Poem" scheme="http://yoursite.com/categories/Poem/"/>
+    
+    
+      <category term="秋" scheme="http://yoursite.com/tags/%E7%A7%8B/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>网络模型之Epoll模型</title>
+    <link href="http://yoursite.com/2015/09/03/%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E4%B9%8BEpoll%E6%A8%A1%E5%9E%8B/"/>
+    <id>http://yoursite.com/2015/09/03/网络模型之Epoll模型/</id>
+    <published>2015-09-02T22:04:25.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>前面实现了2版本的服务器（多进程、Select），这篇是关于Epoll模型的。</p>
+<p>相对于Select，Epoll最大的好处就是用回调来处理可用的连接，省去了轮询带来的操作浪费。Epoll的触发方式有两种：水平触发和边缘触发，水平触发是状态触发，只要符合指定状态都会触发，而边缘触发只发生在状态转换的地方。使用边缘触发可以让时间资源最大化，不过要小心处理读写，否则会出现一直不能写或读的连接。</p>
+<p>原理很简单，我用一个进程实现了所有的操作，给监听socket添加读可用事件，给连接socket添加读可用进程，使用边缘触发机制回调事件。我一开始给连接socket也添加了写可用事件，但是发现，服务器一直不写，原因是当一次写完后，如果此时没有数据要写，那么由于是边缘触发，以后在也不会触发的机会。所以，我用轮询的方式来处理写，维护一个需要写的连接集合，对集合内的每个连接尝试进行非阻塞写。实现过程中只遇到这一个困难。</p>
+<p>代码猛戳：<a href="https://github.com/Harvey-Ai/SystemRep/tree/master/socket/epollSocket" target="_blank" rel="external">点击打开链接</a>。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前面实现了2版本的服务器（多进程、Select），这篇是关于Epoll模型的。&lt;/p&gt;
+&lt;p&gt;相对于Select，Epoll最大的好处就是用回调来处理可用的连接，省去了轮询带来的操作浪费。Epoll的触发方式有两种：水平触发和边缘触发，水平触发是状态触发，只要符合指定状态都
+    
+    </summary>
+    
+      <category term="Language" scheme="http://yoursite.com/categories/Language/"/>
+    
+    
+      <category term="Epoll" scheme="http://yoursite.com/tags/Epoll/"/>
+    
+      <category term="Socket" scheme="http://yoursite.com/tags/Socket/"/>
+    
+      <category term="服务器" scheme="http://yoursite.com/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>网络模型之多进程模型，Select模型</title>
+    <link href="http://yoursite.com/2015/09/02/%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B%E4%B9%8B%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9E%8B%EF%BC%8CSelect%E6%A8%A1%E5%9E%8B/"/>
+    <id>http://yoursite.com/2015/09/02/网络模型之多进程模型，Select模型/</id>
+    <published>2015-09-02T10:49:22.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>本科的时候写过 TCP 后台服务器,当时是好奇心的驱使,学的程度只是熟悉了 API,这次再 Socket 服务器,不仅对后台服务器架构有了更深了理解,对 Linux 系统也有了更深的理解。</p>
+<p>一共花了 4 天时间,写了 2 个 TCP 网络服务器,一个是多进程版本,一个连接进程,用连接进程 Fork 读写进程操作连接的读写;另一个是使用了 Select 的双进程版本,相对第一个版本,进程量少了,资源消耗少了, 网络连接吞吐量大了,不过编程复杂度更高,而且在我实现的版本里需要进程之间能够传递文件描述符的支持,写这个服务器花了挺长时间。</p>
+<p>首先,我们可以实现一个简单的服务器版本,这个服务先接受连接,然后在读写数据。这是我大学时候为了熟悉 API 实现过的版本,当时也只为了 2 个终端之间的连接。这里有个最大的问题,由于读写操作是阻塞的,当一个连接如果没有结束,服务器没法接受另外一个客户端的连接。于是产生了第一种应对多连接的服务器模型,用一个父进程做连接进程,接受客户发起的新连接,用阻塞的方式接受,可以避免 CPU 忙等的情况,接受到连接手,通过 fork 创建一个新进程,新进程用于处理该连接的读写操作。同时在线的用 N 个连接,服务器端就有 N 个读写进程。</p>
+<div>
+
+<p>[caption id=”attachment_1150” align=”aligncenter” width=”244”]<a href="http://115.28.13.176/blog/wp-content/uploads/2015/09/Screenshot-from-2015-09-02-182438.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2015/09/Screenshot-from-2015-09-02-182438.png" alt="多进程服务器模型"></a> 多进程服务器模型[/caption]</p>
+<p></p></div><br>多进程版本思路清晰,逻辑简单,也符合服务器和客户之间的连接关系。不过,多个进程的方式占用了大量的系统资源。<p></p>
+<ul>
+<li>Fork 需要内核处理,占用内核时间。</li>
+<li>新进程要有独立的进程空间,随着 N 增大,需要的空间会越来越多。</li>
+<li>多个读写进程之间的切换,需要耗费系统时间。<br>看出进程的毛病,我们可以可以把多进程的改成多线程,让资源消耗的更少,不用复制进程的空间,存储空间,以及执行流切换时间的时间降低。<br>多线程确实已经非常不错了,我想应该已经能满足一部分中等规模网站的需求了吧。但是可以看见,多个执行流依然有切换代价,虽然线程比进程好很多,但是还是有切换代价,另外系统调度到的线程并不一定是可以读写的线程,如果调度到未准备好的线程,这个调度就是白白浪费时间,在线程这里的执行也是浪费时间。最后一点,也是用一些软件不用多线程的一个重要原因,多线程有“一损俱损”的代价,由于线程之间共享了进程内几乎所有的资源,一代一个线程搞坏了进程内某个信息,或者崩溃,都可能导致整个进程的崩溃,在这里就是一个连接坏了,整个服务器都崩了。</li>
+</ul>
+<p>第二个实现的模型是使用了 Selet 的服务器模型,Select 是 APUE 在 15 章高级 I/O 中讲到的知识,Select 是 I/O 多路 复用技术,是轮询的思路(跟网络里的某型只是是不是很像呢~),能够一次轮询出可以读写的文件,触发方式是水平触发(与 Epoll 的区别),可以设置成阻塞也可以非阻塞。一旦能够确定可读写 socket,我们就丢开了阻塞的包袱,完全可以把所有连接都放到一个进程里来维护。这里我是用双进程实现的,一个连接进程,另一个读写进程,逻辑也非常清晰。</p>
+<div>
+
+<p>[caption id=”attachment_1151” align=”aligncenter” width=”272”]<a href="http://115.28.13.176/blog/wp-content/uploads/2015/09/Screenshot-from-2015-09-02-183221.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2015/09/Screenshot-from-2015-09-02-183221.png" alt="Select服务器模型"></a> Select服务器模型[/caption]</p>
+<p></p></div><br>使用了 Select 模型后,服务器值剩下两个进程,连接进程已经是最优了,浪费的时间只有 Select 轮询的时间,其他的时间都是在与客户端进行读写,比之间的版本有了不少的提升。这个模型唯一的毛病就是 Select 轮询的时间优点长,因为是轮询所以浪费了不少时间在询问没有准备好的读写连接上,下一步优化就在于优化轮询的时间上。<p></p>
+<p>————————————— 以上都是理论——————————————-</p>
+<p>理解了第一个模型的工作方式,代码还是能很快完成的,注意:使用 ntohs 转换 TCP 的字节序和本地字节序,另外一个是服务器端 bind 的 socket 是监听描述符,accpet 获得才是连接描述符。</p>
+<p>实现第二个模型颇费了一些时间,其中核心的问题就是由于连接 Socket 是在读写进程之后创建的,所以需要进程之间传递 socket(文件描述符),这里可以变通换成多线程就没有问题了,但是我不想,既然想好了就这么做下去,除非是在做不下去。个人认为传递描述符是挺重要的一个问题,毕竟 Unix 中所有设备都是文件,能够传递描述符意味了可以传递设备的管理权,否则进程之间只能传递信息。不过虽然看起来重要,好像实际上并没有很多这样的需求,程序员可以选择直接 open 一下设备就好了。</p>
+<p>简单描述一下如何传递文件描述符。请看下图,描述符只是进程内的信息,买个描述符记录了进程打开文件表的索引位置,所以如果要传递文件描述符要内核在当前进程内新打开一个打开文件表项,然后将指针指向传递过来的文件位置。<span style="color: #800000;">所以,不能简单地认为传递一个整数就可以传递文件描述符了。</span></p>
+<p><img src="http://img.blog.csdn.net/20150902183348688" alt=""></p>
+<p>APUE 在 17 章第四节有专门介绍如何在进程见传递描述符的,书中介绍了两种方法,一种是 Stream,另一种用 Unix domain socket 中的 sendmsg 进行传递。然后我就一个一个来呗,调用的方式是ioctl(fd, I_SENDFD, &amp;sendfd),先用的管道,不行,然后又用 Unix domain 消息,还是不行,总是出现 “Inappropriate ioctl for device” , man 一下 ioctl 会发现这个错误并不在文档的 ioctl 说明的错误之内。不知道什么原因,于是在网上找了一圈,搜到一部分信息,原来是 Linux 抛弃了 Stream ,而用 ioctl 传递描述符需要有 Stream 的支持,所以出现了上述错误,(吐槽两句,既然抛弃了还留着参数是几个意思??)。</p>
+<p>关于传递文件的网上资源:<br><a href="http://www.zhihu.com/question/35156527" target="_blank" rel="external">http://www.zhihu.com/question/35156527</a><br><a href="http://stackoverflow.com/questions/2358684/can-i-share-a-file-descriptor-to-another-process-on-linux-or-are-they-local-to-t" target="_blank" rel="external">http://stackoverflow.com/questions/2358684/can-i-share-a-file-descriptor-to-another-process-on-linux-or-are-they-local-to-t</a><br><a href="http://stackoverflow.com/questions/11355552/ioctl-giving-invalid-argument#" target="_blank" rel="external">http://stackoverflow.com/questions/11355552/ioctl-giving-invalid-argument#</a><br><a href="http://fixunix.com/unix/84093-streams-pipes-ioctl-i_sendfd.html" target="_blank" rel="external">http://fixunix.com/unix/84093-streams-pipes-ioctl-i_sendfd.html</a></p>
+<p>之后用 sendmsg 中的辅助数据进行传输,类型设为 SCM_RIGHTS ,调试过程还算顺利,有个问题也是需要重点突出来的,就是一开始我写的 sendmsg 和 recvmsg 一传输数据程序就自动退出,没有任何错误提示,通过打印 $? ,得到结果是 50 ,是一个奇葩的什么锁问题。<span style="color: #800000;">调试一下,发现是 struct msghdr 中的辅助数据msg_control 只能是用栈空间变量,如果 malloc 出来的变量就会出现错误,应该数据所占空间有关, malloc并增加 struct 内部使用空间,猜想这里出了问题(有知道的,请留言~)</span>。</p>
+<p>正确定义如下:</p>
+<p><pre>Union {<br>struct cmsghdr cm;<br>char data[CMSG_SPACE(sizeof(int))];<br>} cmsg;<br></pre><br>另外在读写进程里 Select 还要设成非阻塞,否则没法接受新连接。<br>还有 <span style="color: #800000;">(</span>connfd = accept(sockfd, (sockaddr *)&amp;connAddr, &amp;connAddrLen)<span style="color: #800000;">)</span> &gt; 0) ,加红的括号一定要有,<br>否则由于 = 优先级低于 &gt; , connfd 始终等于 1 。</p>
+<p>代码请戳：<a href="https://github.com/Harvey-Ai/System/tree/master/socket/multThreadSocket" target="_blank" rel="external">多进程器服务器</a>，<a href="https://github.com/Harvey-Ai/System/tree/master/socket/selectSocket" target="_blank" rel="external">Select 服务器</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本科的时候写过 TCP 后台服务器,当时是好奇心的驱使,学的程度只是熟悉了 API,这次再 Socket 服务器,不仅对后台服务器架构有了更深了理解,对 Linux 系统也有了更深的理解。&lt;/p&gt;
+&lt;p&gt;一共花了 4 天时间,写了 2 个 TCP 网络服务器,一个是多进程版
+    
+    </summary>
+    
+      <category term="Language" scheme="http://yoursite.com/categories/Language/"/>
+    
+    
+      <category term="Select模型" scheme="http://yoursite.com/tags/Select%E6%A8%A1%E5%9E%8B/"/>
+    
+      <category term="多进程模型" scheme="http://yoursite.com/tags/%E5%A4%9A%E8%BF%9B%E7%A8%8B%E6%A8%A1%E5%9E%8B/"/>
+    
+      <category term="文件描述符" scheme="http://yoursite.com/tags/%E6%96%87%E4%BB%B6%E6%8F%8F%E8%BF%B0%E7%AC%A6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>两道几何题</title>
+    <link href="http://yoursite.com/2015/08/26/%E4%B8%A4%E9%81%93%E5%87%A0%E4%BD%95%E9%A2%98/"/>
+    <id>http://yoursite.com/2015/08/26/两道几何题/</id>
+    <published>2015-08-26T13:59:44.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><a id="more"></a>题一：求二维平面上，两个圆是否有公切弦，如果有，求出公切线。</p>
+<p>在朋友的博客上看到这个问题，别人推导了很优美的公式出来，非常棒，不过推导公式是“一步登天”的思维方式，如果是在比赛中或者正工作中，可能要非常短的时间就要做出来，那么我们就要将步骤分解，尽量能得到有用的参数。2个圆有五种分布状态，简单分析一下：</p>
+<ol>
+<li>分离，4条公切线，2外，2内</li>
+<li>外相切，3跳公切线，2外，1内</li>
+<li>相交，2条公切线，2外</li>
+<li>内相切，1条公切线，1外</li>
+<li>包含，没有公切线<br>这三种情况很好区分，比较一下圆的半径和与圆心之间的距离就可以了。假定两个圆是(x1, y1), R1和(x2, y2), R2。这里这描述一下外向切和内向切，</li>
+</ol>
+<ul>
+<li>外向切，Distance((x1, y1), (x2, y2)) == R1 + R2</li>
+<li>内相切，Distance((x1, y1), (x2, y2)) == |R1 – R2|<br>确定状态后，求可以挨个去求了，下面只分析相离的外公切线的情况，其他情况可以套用分析方法。</li>
+</ul>
+<p><a href="http://115.28.13.176/blog/wp-content/uploads/2015/08/Screenshot-from-2015-08-26-221355.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2015/08/Screenshot-from-2015-08-26-221355-300x132.png" alt="Screenshot from 2015-08-26 22:13:55"></a></p>
+<p>虚实相交的线是我做的辅助线，可以看出有公切线和辅助线组成了2个直角三角形，且相似，相似！那么<br>设三角形顶点的位置为(xt, yt)（假设向左衍生）：</p>
+<p>x1 – xt / x2 – xt = r1 / r2 ==&gt; xt = (r2x1 – x2r1) / (r2 – r1)</p>
+<p>同理可得yt，这样就得到了切线上的一个点，斜率通过长度也可以迅速求出，这样就一步解决了问题。其他的情况用相似三角形手段都能求出。</p>
+<p>回顾流程，一共三步:</p>
+<ol>
+<li>判断圆的分布</li>
+<li>利用相似三角形，求出公切线上一个点</li>
+<li>求出斜率<br>思路清晰，公式少，不易出错。相对与推公式的方法，简单、有效。</li>
+</ol>
+<p>题二：给一个三角形，问三角形会不会与圆相交。</p>
+<p>题目描述非常简单，难度也不大，是51nod的上一道2等级的题，问想不相交，其实就是问每一条线与圆是不是都没有交点。问题便简化成线段与圆的相交问题，当然很多人用几何的方法去推导公式，什么点到直线的距离，求垂线，然后求交点，再求交点是不是在这个线段上等等。。。</p>
+<p>这里我还是想个懒，用工程师的思维去考虑问题。如何找到线段上一个点，这个点到给定点距离最近，我们可以用二分逼近的手段去做，请看下面的图例，H是最终确定的位置，设左右两边点是P1， P2，如果P2到外面点的距离更远一下，我们可以用P1和P2的中点来代替P2，并且代替过后垂线交点的位置一定还在P1，P2中间，所以可以这样一直二分下去，知道直到找到垂线交点（取一个误差范围，小于误差则结束）。<br>这样做便避免了复杂的求公式的过程，简化了问题的求解难度。</p>
+<p><a href="http://115.28.13.176/blog/wp-content/uploads/2015/08/Screenshot-from-2015-08-26-221408.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2015/08/Screenshot-from-2015-08-26-221408-300x103.png" alt="Screenshot from 2015-08-26 22:14:08"></a></p>
+<p>总结一下，计算机就是用来处理简单而大量的计算的，而人是用来想出流程的，需要权衡两者的复杂程度，不能为了节省计算机资源而大量耗费人的脑力，所以，如果枚举行的通，就不要用更高深的东西，毕竟，人生短暂，岂能让韶华易逝！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yoursite.com/categories/Algorithm/"/>
+    
+    
+      <category term="二分法" scheme="http://yoursite.com/tags/%E4%BA%8C%E5%88%86%E6%B3%95/"/>
+    
+      <category term="圆公切线" scheme="http://yoursite.com/tags/%E5%9C%86%E5%85%AC%E5%88%87%E7%BA%BF/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>神奇的差速齿轮</title>
+    <link href="http://yoursite.com/2015/08/26/%E7%A5%9E%E5%A5%87%E7%9A%84%E5%B7%AE%E9%80%9F%E9%BD%BF%E8%BD%AE/"/>
+    <id>http://yoursite.com/2015/08/26/神奇的差速齿轮/</id>
+    <published>2015-08-26T08:38:52.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>小时候喜欢折腾模型，玩过四驱车，里面有高速齿轮，平速齿轮等各种齿轮。但是，四驱车有一个致命的缺点，就是四驱车不能转弯，在有轨道的条件下看不出问题，但是平时玩，只能靠人工来强行改变行进方向。究其原因是当车转弯是，左右两个轮子的转动比是不一样的，内侧车轮的转速要低于外侧，而四驱车没有这样的功能。</p>
+<p>火车的转向非常缓慢，解决的方法是通过调节轨道高度，让内外测轨道高度不一样，从而调节内外测轮子的转速，达到转弯的目的。显然，这种方法不适用于普通汽车等需要快速转弯的无轨交通工具上。</p>
+<p>今天要讲的就是用在汽车上的一种驱动技术-差速齿轮（写这篇文章原因也是前天晚上谁在床上，突然想起，又想不起怎样实现。。。）。差速齿轮顾名思义，能实现有不同转速的齿轮之间的传动。设计的非常巧妙，直接上视频。。。</p>
+<embed src="http://player.youku.com/player.php/sid/XNDA3OTgyODIw/v.swf" type="application/x-shockwave-flash" width="480" height="400" align="middle">
+
+<p>总结一下，变速齿轮通过增加自身转动，实现了灵活的转移。当一边齿轮降低速度时，低速齿轮实际上成为了转动发起方，将转动转移给变速齿轮，而另一方面提高了其他齿轮的速度。当一放齿轮停止是，高速齿轮的转速实际上变成了原速度的2倍，这里也体现了能量守恒的定律。</p>
+<p>生活中稍微留意观察一下大卡车的后轮杠杆中央的地方(就是屁股那，没有遮蔽），会发现几乎每个卡车那里都是一大瘤，那里就是变速齿轮，就是为汽车转弯变速用的。</p>
+<p>[caption id=”attachment_1130” align=”aligncenter” width=”198”]<a href="http://115.28.13.176/blog/wp-content/uploads/2015/08/Screenshot-from-2015-08-26-162504.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2015/08/Screenshot-from-2015-08-26-162504.png" alt="差速器"></a> 差速器[/caption]</p>
+<p>=====================================================================================================<br>最后留一个问题，是我以前从实验室大牛那里知道的，都说三角形稳定，为什么飞起器都是清一色的四个飞轮？<br><span style="color: #ffffff;">答案是：这是实验室大牛在制作飞行器的时候告诉我的，每个飞盘都有一定的角动量，如果是奇数个飞轮，飞行器会在空中自转。</span></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;小时候喜欢折腾模型，玩过四驱车，里面有高速齿轮，平速齿轮等各种齿轮。但是，四驱车有一个致命的缺点，就是四驱车不能转弯，在有轨道的条件下看不出问题，但是平时玩，只能靠人工来强行改变行进方向。究其原因是当车转弯是，左右两个轮子的转动比是不一样的，内侧车轮的转速要低于外侧，而四驱
+    
+    </summary>
+    
+      <category term="Engineer" scheme="http://yoursite.com/categories/Engineer/"/>
+    
+    
+      <category term="差速齿轮" scheme="http://yoursite.com/tags/%E5%B7%AE%E9%80%9F%E9%BD%BF%E8%BD%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>TCO 2015 2D</title>
+    <link href="http://yoursite.com/2015/08/25/TCO%202015%202D/"/>
+    <id>http://yoursite.com/2015/08/25/TCO 2015 2D/</id>
+    <published>2015-08-24T20:18:43.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>250分题：给一段只有‘0’，‘1’构成的字符串，然后给出串上平衡点的定义：在串上找到某个点（位置是p），这个点将串分成左右两部分（可以为空），左右分别计算字符的值的和，如果左边有字符是‘1’，那么字符值加上当前位置（i）与平衡点位置的距离（p - i)，同理计算右边，如果左右的字符值相等，则就是平衡点。举例：100111是一个中第二个1将串分成100和11，左右的值都是3，是平衡点。</p>
+<p>问这段’0’, ‘1’字符串中能找到多少个包含平衡点的子串?<br>串长度 &lt; 2500</p>
+<p>解析：看数据量是一个不能超过O(N^3)的题目，所以不能枚举子串的头尾，然后再枚举每一个点是否是平衡点。这题有很多种做法，可以枚举枚举平衡点的位置，也可以枚举子串，再检测子串是不是含有平衡点。</p>
+<p>枚举平衡点的做法是先枚举每个点位置作为平衡点，然后分别扫描左边，记录所有值出现的次数，然后再扫描右边，计算字符值，如果左边出现了相同的字符值，就是一个含有平衡点的子串，所以结果加上左边出现当前字符值的次数。这样计算的复杂度是O(N^2 * logN)，时间没有问题，但是有一个trick，就是枚举的是平衡点，算子串的时候会有重复计算，想一下可以发现，只有全’0’的字符串中的平衡点可以任意移动，其他字符串要么没有平衡点，要么仅有一个平衡点，所以这里要小心处理0的情况，比赛的时候脑袋蒙全，一直没理清楚。</p>
+<p>另外一种就是枚举子串，一旦确定子串就要在非常短的时间内判断子串是否包含平衡点，想一下，’平衡点’如果在串中移动会有什么效果（假定向右）：</p>
+<ul>
+<li>左边的值 += 左边‘1’的个数</li>
+<li>右边的值 -= 右边‘1’的个数<br>结果就是左值 – 右值加上了全部‘1’的个数，反向移动就是减去全部‘1’的个数。考虑另外一个事实:’平衡点’左端点时，左值 – 右值 &lt;= 0;右边,左值 – 右值 &gt;= 0;加上前面的推论，点在串中移动如果存在 左值 – 右值 == 0的情况，左值 – 右值一定是串中’1’个数的倍数。端点处的左右值差用前缀和，’1’个数也用前缀和来求，这样得到复杂度为O(N^2)的算法。</li>
+</ul>
+<p>还有另外O(N^2)的算法，也挺优美，不再表述，可以通过右（左）值的单调性，来移动平衡点。</p>
+<p>法一代码：</p>
+<pre>class BalancedSubstrings {
+    public:
+    int countSubstrings(string s) {
+        int res = 0;
+
+        for(int i = 0;i &lt; s.size();i++) {
+            int sum = 0;
+            map&lt;int, int&gt; sumMap;
+            sumMap[0] = 1;
+            for(int j = i - 1;j &gt;= 0;j--) {
+                if (s[j] == '1') {
+                    sum += (i - j);
+                }
+                if (sumMap.find(sum) == sumMap.end()) {
+                    sumMap[sum] = 1;
+                } else {
+                    sumMap[sum]++;
+                }
+            }
+
+            sum = 0;
+            res += sumMap[0];
+            for(int j = i + 1;j &lt; s.size();j++) {
+                if (s[j] == '1') {
+                    sum += (j - i);
+                }
+                if (sum == 0 &amp;&amp; s[i] == '0') {
+                    continue;
+                }
+
+                if (sumMap.find(sum) != sumMap.end()) {
+                    res += sumMap[sum];
+                }
+            }
+        }
+        return res;
+    }
+};</pre>
+法二代码：
+<pre>class BalancedSubstrings {
+    public:
+    int countSubstrings(string s) {
+
+        int sum[2550], cnt[2550];
+        memset(sum, 0, sizeof(sum));
+        memset(cnt, 0, sizeof(cnt));
+        for(int i = 0;i &lt; s.size();i++) {
+            cnt[i + 1] = cnt[i] + (s[i] == '1');
+            sum[i + 1] = sum[i] + (s[i] == '1') * i;
+        }
+
+        int res = 0;
+        for(int i = 0;i &lt; s.size();i++) {
+            for(int j = i;j &lt; s.size();j++) {
+                if (cnt[j + 1] - cnt[i] == 0 || 
+                        (sum[j + 1] - sum[i]) % (cnt[j + 1] - cnt[i]) == 0)
+                    res++;
+            }
+        }
+
+        return res;
+    }
+};</pre>
+500分题：给一个顺序排列的N个箱子，这N个箱子里有连续K个是有东西的箱子，其余的都是空的。某人用最优的方法去确定这K个箱子的位置，问最坏情况下要多少次？
+N，K都是long long。
+
+解析：这种关于策略的问题很烦，如果没有见过类似的题目可能会心理发慌，不过冷静一下，很多问题都是纸老虎。考虑这样一个问题：如果不知道箱子个数，我们如何确定有东西箱子的头呢。想想看能不能用二分呢？答案是否定的，因为如果找到一个空箱子，不能确定有东西箱子是在前面还是后面，那什么时候可以二分呢？知道有K个箱子可以吗？不完全行，因为如果当前二分位置前面有超过K个箱子没有被检测，那我们是不知道前面有没有有东西的箱子的。聪明的读者可能想到，如果箱子数 &lt;= 2K个不就可以了吗？第一次枚举在K处，如果有箱子则向前二分，否则箱子在后面。最有策略就是这样的，至于为什么是二分，因为基于比较的最快的查找就是二分。。
+
+考虑了前面的子问题，如何处理箱子数超过2K的情况呢，超过2K的箱子，我们是不能用二分的，只能用贪心的方法粗略的确定有东西箱子的位置，就是每隔K个箱子检测一次，如果检测到，可以用二分去找到头部。最坏的情况就是剩下2K时还没有找到箱子的位置，最后2K个箱子用二分来确定。这里还有一个小trick，最后K – 1个是不用二分的，他们肯定不是头，直接把这K – 1减去即可。
+
+代码：
+<pre>class BallsInBoxes { 
+    public: 
+    long long maxTurns(long long N, long long K) { 
+        if (N &lt;= K) { 
+            return 0; 
+        } 
+
+        N -= K; 
+        long long left = N - max((N + K - 1) / K - 2, 0LL) * K; 
+        long long res = max((N + K - 1) / K - 2, 0LL); 
+
+        while(left &gt; 0) { 
+            left /= 2; 
+            res++; 
+        } 
+
+        return res; 
+    } 
+};
+</pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;250分题：给一段只有‘0’，‘1’构成的字符串，然后给出串上平衡点的定义：在串上找到某个点（位置是p），这个点将串分成左右两部分（可以为空），左右分别计算字符的值的和，如果左边有字符是‘1’，那么字符值加上当前位置（i）与平衡点位置的距离（p - i)，同理计算右边，如果
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yoursite.com/categories/Algorithm/"/>
+    
+    
+      <category term="TopCoder" scheme="http://yoursite.com/tags/TopCoder/"/>
+    
+      <category term="TCO" scheme="http://yoursite.com/tags/TCO/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>做梦</title>
+    <link href="http://yoursite.com/2015/08/23/%E5%81%9A%E6%A2%A6/"/>
+    <id>http://yoursite.com/2015/08/23/做梦/</id>
+    <published>2015-08-23T10:56:01.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>近一年来经常做梦，以前没有都没有做梦的习惯。这一年来过的非常的困窘、压抑，似乎在一个怪圈子里原地打转，被无形的东西压的喘不过起来，白天还感觉自我良好，然后晚上经常幻想，想的天花乱坠，多数都是气氛压抑、让人内心恐慌的情景。梦的次数非常多，有时候睡个午觉都能幻想起一个故事，而醒后对故事的记忆特别深，几乎能完全复述出梦到的东西，有些梦是恐怖的，回想起来让人不寒而栗，更多的是一些小片段，天花乱坠，没有逻辑，又看起来挺自然的。</p>
+<p>所有做的梦都是在我的圈子范围以内的东西，而我似乎又是那个主角，有强烈的带入感。我能记的住的有下面几个小片段：</p>
+<ul>
+<li>家里面有很多个花瓶，每个瓶子上都插了三朵花，不过都是假花，我就和妈妈吵，说一定要插一支真花进去。</li>
+<li>背景是天空，天空上有一个残破的建筑只露出了左上角，左上角的旁边有一个紧贴墙壁通向屋顶的铁梯，右边有个小台子，可以搭脚，我的脚刚离开小台子，双手扶在铁梯上，正要往上爬，心理非常害怕。</li>
+<li>在无为通向巢湖的高速公路上，车里有我，还有高中同学，（为啥是高中同学，我也不知道），两个比较调皮的（我不说姓名），在车上喧闹着，嬉笑这，开着超快的车速，飞一样在高速上赶上一辆又一辆大型货车，我心理特别害怕，非常想叫他们开慢点，怕不小心就出了车祸。</li>
+<li>临近毕业，研究生同学坐在一起（哪些人我都非常清楚），有个同学说，老师开始对我不待见了，快毕业了。其他的同学都稍有叹息的默不做声。</li>
+<li>一面大墙下，或者是牌坊，是门很小里面有教务办这样一栋建筑，我在楼下遇见了某研究生同学，研究生同学非常鄙夷，有嬉笑的看着我走过去。<br>很多梦没有现实场景，但是梦里的人物形象都是与现实项符合的，而我担心的东西也是现实存在的。还有一些梦有一些故事情节，有些亮点。</li>
+</ul>
+<p>大娃要走了，然后大娃来实验室询问一些事情，做好交接工作，好像连一年后的事情都考虑到了，事无巨细。然后我们最后在一起商讨着什么，还有张璟（小学同学），在我家？聊天，还说到我家境还可以神马的。这时候，叔叔开车不知道从什么地方过来，要带我们去歌舞厅玩，还有奶奶，但是想到要送大娃就有点不想去。走到一半，我好像打电话什么的，然后跑到电话亭拼命地刷卡，叔叔也在刷。心里面想着赶紧去火车站，然后最后大家一起照个相，还是很有意义的。奶奶身体比较差，然后在车上还跟叔叔闹了矛盾。这个时候不知道从哪里传来了乌鸦声，（乌鸦声在梦里假定为不详的预兆），大家开始还都以为是奶奶，但是走进听发现不是，然后又好像是叔叔，叔叔说怎么可能是我呢，一阵恐慌，确认了一下不是，然后大家再听，发现声音竟然是从我这个岁数最小的身上发出来的，“哇，哇”的，仿佛我的嘴巴要张开了似的 。然后就真“哇，哇”地，我被自己的声音惊醒了。</p>
+<p>最近还做了一个生化危机故事的梦，回想起来非常后怕，然后就在今天竟然做起了一个在海边的毕业梦，多种奇怪素材，有什么猫吐塑料，小学同学与大学同学混杂，海边刮大风坚持抱皮球游戏等等。。。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;近一年来经常做梦，以前没有都没有做梦的习惯。这一年来过的非常的困窘、压抑，似乎在一个怪圈子里原地打转，被无形的东西压的喘不过起来，白天还感觉自我良好，然后晚上经常幻想，想的天花乱坠，多数都是气氛压抑、让人内心恐慌的情景。梦的次数非常多，有时候睡个午觉都能幻想起一个故事，而醒
+    
+    </summary>
+    
+      <category term="Life" scheme="http://yoursite.com/categories/Life/"/>
+    
+    
+      <category term="梦" scheme="http://yoursite.com/tags/%E6%A2%A6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>跳台阶问题与斐波那契数列</title>
+    <link href="http://yoursite.com/2015/08/08/%E8%B7%B3%E5%8F%B0%E9%98%B6%E9%97%AE%E9%A2%98%E4%B8%8E%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97/"/>
+    <id>http://yoursite.com/2015/08/08/跳台阶问题与斐波那契数列/</id>
+    <published>2015-08-07T19:57:58.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>题目描述：一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法。（题目链接：<a href="http://www.nowcoder.com/books/coding-interviews/8c82a5b80378478f9484d87d1c5f12a4?rp=1" target="_blank" rel="external">跳台阶）</a></p>
+<p>解析，初学者可能会想到用递归的方法，f(n) = f(n - 1) + f(n - 2)，这样写的缺点显而易见，复杂度过高，是指数级别，是复杂度是所以聪明一点的程序设计者会使用动态规划的方法，保存中间临时变量，这样时间复杂度就降成了O(N)，空间复杂度也变成了O(1)。</p>
+<p>好奇的人可能不会满足现在的解，继续探索更好的解。线性代数是专门解决线性问题的，这里的线性迭代过程可以用矩阵乘法进行优化，请看下面的乘法：</p>
+<p><a href="http://115.28.13.176/blog/wp-content/uploads/2015/08/download.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2015/08/download.png" alt="Fibonacci_1"></a></p>
+<p>这个式子有什么好处呢，可以发现每一次迭代只是当前项矩阵与一个常数矩阵的乘法，然后求第N项就是求一个初始举证乘以一个常数举证的N次方的结果，求矩阵幂可以有快速幂的方法，复杂度是O(logN)，这样我们就把复杂度降到了log量级了。<br>如果是还有读者对这个结果还不满意，还想进一步进行求解。那么他一定在想O(1)的解法，这样的解法会有吗？稍微看一下就知道这是一个斐波那契数列，上网搜一下，立马能找到斐波那契的通项公式，有了公式理论上是可以到O(1)的，不过这个通项有幂运算，计算复杂度依然不会小于log量级，除非事先打表。接下来，有一个<a href="http://www.nowcoder.com/books/coding-interviews/22243d016f6b47f2a6928b4313c85387?rp=1" target="_blank" rel="external">升级版的青蛙跳台阶问题</a>，就是青蛙跳台阶的级数由1-2上升到1-n，同样是问青蛙跳到n级台阶的方案有多少种。</p>
+<p>虽然是跳的台阶数增加了，之前的方法还是可行的，用的方法时间复杂变成了O(n ^ 2)，用矩阵的方法的复杂度变成了O(nlogn)，似乎都不太够理想，有没有比较优美一点的答案呢？推导一下f(n) = f(n – 1) + f(n – 2) + …. f(0)，那么f(n – 1) = f(n – 2) + …. f(0)可以看出f(n) = 2 * f(n – 1)，惊讶了！变成了一个等比数列，结果变成了一个纯数学解。。。</p>
+<p>有不少类似的题目，比如说大牛隔3年能生小牛,问第N天有多少牛的问题，实质上就是一个线性迭代问题，这类问题就是稍微变化了一下斐波那契数列，都可以用矩阵的方法。不过具体问题还是要具体分析，就像后面一个问题能找出数学解这么神奇的事情～</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;题目描述：一只青蛙一次可以跳上1级台阶，也可以跳上2级。求该青蛙跳上一个n级的台阶总共有多少种跳法。（题目链接：&lt;a href=&quot;http://www.nowcoder.com/books/coding-interviews/8c82a5b80378478f9484d87d
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yoursite.com/categories/Algorithm/"/>
+    
+    
+      <category term="剑指Offer" scheme="http://yoursite.com/tags/%E5%89%91%E6%8C%87Offer/"/>
+    
+      <category term="斐波那契" scheme="http://yoursite.com/tags/%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>链接库编写的问题总结</title>
+    <link href="http://yoursite.com/2015/06/24/%E9%93%BE%E6%8E%A5%E5%BA%93%E7%BC%96%E5%86%99%E7%9A%84%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/"/>
+    <id>http://yoursite.com/2015/06/24/链接库编写的问题总结/</id>
+    <published>2015-06-23T17:47:16.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近写了一个库，写的时候没发现多少错误，到别人用的时候，才发现各种各样的问题。</p>
+<ol>
+<li>不同接口本来没测试全，平台不同，代码执行结果不同。</li>
+<li>头文件编写不合理，与使用者头文件产生冲突。</li>
+</ol>
+<p>以上问题需要解决。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近写了一个库，写的时候没发现多少错误，到别人用的时候，才发现各种各样的问题。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;不同接口本来没测试全，平台不同，代码执行结果不同。&lt;/li&gt;
+&lt;li&gt;头文件编写不合理，与使用者头文件产生冲突。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;以上问题需要解决。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="System" scheme="http://yoursite.com/categories/System/"/>
+    
+    
+      <category term="链接库" scheme="http://yoursite.com/tags/%E9%93%BE%E6%8E%A5%E5%BA%93/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>VS上设置C链接库</title>
+    <link href="http://yoursite.com/2015/06/16/VS%E4%B8%8A%E8%AE%BE%E7%BD%AEC%E9%93%BE%E6%8E%A5%E5%BA%93/"/>
+    <id>http://yoursite.com/2015/06/16/VS上设置C链接库/</id>
+    <published>2015-06-15T16:48:57.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近要将一个在linux上实现的动态链接文件（.so）移植到windows上，在linux编译动态库非常简单，用g++ -fPIC -shared就基本搞定问题了，前一个选项是编译地址无关的代码，后一个是指定生成动态链接文件，so文件是包含符号表的，除非有特殊要求，编译起来很方便。</p>
+<p>一直到windows上有一堆破事，要将导出符号显示声明（<strong>dllspec(dllexport)和</strong>dllspec(dllimport))，因为要生成的dll文件还有其他依赖，编译过程中出现了各种链接错误，在网上找了一下，是runtime library这个是指不对，依赖工程和dll工程的这个选项不一致。</p>
+<p>这个选项的意思是指定需要链接CRT实现文件，CRT是Windows为提供的C++标准函数（例如：printf、scanf、strlen、fopen等函数）以及一些扩展函数而 实现的编译文件，CRT 文件有多种，包括静态/动态，多线程，调试/发行版，所以一个工程及其依赖需要链接相同类型的CTR文件，不然知道会造成符号混乱。下面是详细设置:</p>
+<ul>
+<li>/MD 链接MSVCRT.lib多线程动态版本（debug版都是加上后缀d，以下相同）</li>
+<li>/MT链接LIBCMT.lib多线程静态版本</li>
+<li>/ML 链接LIBC.lib单线程静态版本</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近要将一个在linux上实现的动态链接文件（.so）移植到windows上，在linux编译动态库非常简单，用g++ -fPIC -shared就基本搞定问题了，前一个选项是编译地址无关的代码，后一个是指定生成动态链接文件，so文件是包含符号表的，除非有特殊要求，编译起来
+    
+    </summary>
+    
+      <category term="DevTool" scheme="http://yoursite.com/categories/DevTool/"/>
+    
+      <category term="System" scheme="http://yoursite.com/categories/DevTool/System/"/>
+    
+    
+      <category term="VS" scheme="http://yoursite.com/tags/VS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>独游香山</title>
+    <link href="http://yoursite.com/2015/03/27/%E7%8B%AC%E6%B8%B8%E9%A6%99%E5%B1%B1/"/>
+    <id>http://yoursite.com/2015/03/27/独游香山/</id>
+    <published>2015-03-27T05:02:42.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><strong>独游香山</strong></p>
+<p>阳春三月煦日天，骑车西行游香山。</p>
+<p>去年今日友人在，不知此时事于何。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;strong&gt;独游香山&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;阳春三月煦日天，骑车西行游香山。&lt;/p&gt;
+&lt;p&gt;去年今日友人在，不知此时事于何。&lt;/p&gt;
+
+    
+    </summary>
+    
+      <category term="Poem" scheme="http://yoursite.com/categories/Poem/"/>
+    
+    
+      <category term="香山" scheme="http://yoursite.com/tags/%E9%A6%99%E5%B1%B1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>二维平面上构成任意多边形的必要条件</title>
+    <link href="http://yoursite.com/2015/03/19/%E4%BA%8C%E7%BB%B4%E5%B9%B3%E9%9D%A2%E4%B8%8A%E6%9E%84%E6%88%90%E4%BB%BB%E6%84%8F%E5%A4%9A%E8%BE%B9%E5%BD%A2%E7%9A%84%E5%BF%85%E8%A6%81%E6%9D%A1%E4%BB%B6/"/>
+    <id>http://yoursite.com/2015/03/19/二维平面上构成任意多边形的必要条件/</id>
+    <published>2015-03-19T14:32:22.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>题目：有一个二维平面，某人起初站在（0， 0）点，这个人可以朝任意方向走去，不过只能沿一个方向走，走到一定距离后才能换方向，现在，给一些距离vector&lt;double&gt; dist，每一个距离值只能被用一次，问这个人是否可以走到（x， 0）点？</p>
+<p>分析：题目的实质上就是问一个封闭的多边形（无论凸还是凹）是否能由一些指定的边长构成。这道题目是我在一次SRM上碰到的，当时是过了，不过是用的形象思维，想的是如果这些边是一根根木条，然后推导的。今天在群里面问道的时候，发现思路有点混乱，所以在这里把思路整理，对结论进行一下证明。当满足一下两个条件时，可以构成封闭多边形：</p>
+<ul>
+<li>如果这个人一直朝x的方向走，如果还不能通过（x， 0）点，那么必不能走到（x， 0），条件一是：Sum(dist) &gt; = x。</li>
+<li>如果其中有一段很长的距离，如果先按这个距离走了，然后其他距离都是朝（x， 0）走，然后也不能穿过（x， 0），那么怎么走都不可能到达（x， 0）。<br>这里用一个循环不变式进行证明，先对这些距离从大到小排序，然后每次拿出最大的距离走，让其满足下面两个条件：(dist1, dist2 .. 是从大到小待走的距离，y是已经走的终点和最终终点的距离）</li>
+</ul>
+<ol>
+<li>dist1 + dist2 + dist3 + dist4 + … &gt;= y</li>
+<li>dist1 &lt;= dist2 + dist3 + …. + y   =&gt; y &gt;= dist1 - dist2 - dist3……<br>然后走dist1后，y值的变化是怎样的呢，如果按最终终点反方向走，则newY = y + dist1；如果朝最终终点走，newY = abs(y - dist1)，所以newY 取值是[abs(y - dist1), y + dist1]。</li>
+</ol>
+<p>然后是由上式的1， 2可以得出abs(y - dist1) &lt;=  dist2 + dist3 + ….，所以newY又满足1; 然后显然y + dist1 &gt;= dist2 - dist3 - …，所以newY又满足2。循环满足以上直到最后形成三角形。证毕。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;题目：有一个二维平面，某人起初站在（0， 0）点，这个人可以朝任意方向走去，不过只能沿一个方向走，走到一定距离后才能换方向，现在，给一些距离vector&amp;lt;double&amp;gt; dist，每一个距离值只能被用一次，问这个人是否可以走到（x， 0）点？&lt;/p&gt;
+&lt;p&gt;分析
+    
+    </summary>
+    
+      <category term="Algorithm" scheme="http://yoursite.com/categories/Algorithm/"/>
+    
+    
+      <category term="SRM" scheme="http://yoursite.com/tags/SRM/"/>
+    
+      <category term="多边形" scheme="http://yoursite.com/tags/%E5%A4%9A%E8%BE%B9%E5%BD%A2/"/>
+    
+      <category term="循环不变式" scheme="http://yoursite.com/tags/%E5%BE%AA%E7%8E%AF%E4%B8%8D%E5%8F%98%E5%BC%8F/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu下解决Chrome卡死问题</title>
+    <link href="http://yoursite.com/2015/03/16/Ubuntu%E4%B8%8B%E8%A7%A3%E5%86%B3Chrome%E5%8D%A1%E6%AD%BB%E9%97%AE%E9%A2%98/"/>
+    <id>http://yoursite.com/2015/03/16/Ubuntu下解决Chrome卡死问题/</id>
+    <published>2015-03-16T05:54:47.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>去年因为VirtualBox与Fedora版本总是不兼容，一怒之下删除了使用了多年的Fedora，安装上Ubuntu14.04 TLS。Ubuntu用起来非常舒服，比Fedora流畅很多。</p>
+<p>不过，用过一阵子之后发现当Chrome打开多个网页的时候，偶尔会出现系统疯狂读写硬盘，卡死的情况。上网找了一下，有人说是Chrome的自带Flash造成的原因，然后就没太在意，毕竟发生的频率不高。最近，在做Android开发，要开模拟器，机器动不动就卡死，上网找了一圈，有人说是Swap的问题。</p>
+<p><a href="http://115.28.13.176/blog/wp-content/uploads/2015/03/Screenshot-from-2015-03-15-165840.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2015/03/Screenshot-from-2015-03-15-165840.png" alt="free"></a></p>
+<p>Top一下，发现机器的Swap是0，Ubuntu的默认安装没有添加Swap空间，也是醉了，怪不得出现疯狂读写硬盘的情况，问题应该就在这里。然后按以下步骤添加Swap空间。</p>
+<p><pre>#cd /<br>1） 添加Swap分区， 4G</pre></p>
+<p>#dd if=/dev/zero of=swap bs=1M count=4096<br>2） 格式化</p>
+<p>#mkswap swap<br>3） 打开Swap空间</p>
+<p>#swapon swap<br>4） 编辑/etc/fstab，添加下面的一行，增加分区启动项。(这里不能用UUID，因为并不是一个分区)<br>/swap   /swap   swap    sw 0    0<br><br>添加之后无需重启，运行流畅，再没出现Chrome卡死的情况。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;去年因为VirtualBox与Fedora版本总是不兼容，一怒之下删除了使用了多年的Fedora，安装上Ubuntu14.04 TLS。Ubuntu用起来非常舒服，比Fedora流畅很多。&lt;/p&gt;
+&lt;p&gt;不过，用过一阵子之后发现当Chrome打开多个网页的时候，偶尔会出现系
+    
+    </summary>
+    
+      <category term="Engineer" scheme="http://yoursite.com/categories/Engineer/"/>
+    
+    
+      <category term="Chrome" scheme="http://yoursite.com/tags/Chrome/"/>
+    
+      <category term="Swap" scheme="http://yoursite.com/tags/Swap/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>回顾我的语言成长</title>
+    <link href="http://yoursite.com/2014/12/28/%E5%9B%9E%E9%A1%BE%E6%88%91%E7%9A%84%E8%AF%AD%E8%A8%80%E6%88%90%E9%95%BF/"/>
+    <id>http://yoursite.com/2014/12/28/回顾我的语言成长/</id>
+    <published>2014-12-28T13:43:06.000Z</published>
+    <updated>2017-01-02T07:48:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>记得我问过我母亲这样一个问题，“我开口说话的时间是不是在同龄人中算早的？”，本以为会得到一个肯定的答复，结果却得到了恰恰相反的答案，我的说话时间比较晚。当时没有仔细去想，也许小孩子的智力发育水平和说话的时间没有直接的关系，不过现在看来，有一点是可以肯定的：那就是我比较笨。</p>
+<h3 id="回顾以前"><a href="#回顾以前" class="headerlink" title="回顾以前"></a>回顾以前</h3><p>我也不知道是舌头没长好还是由于孤僻的性格所致，从小我就不喜欢说话，和陌生人很少说话，即便是熟人、也难得说上话，除非是同龄的孩子，只有他们能让我滔滔不绝。不说话这个毛病也让我吃了很多的亏，举个例子，我高中开始就开始走读，每天上下学都要做公交，公交上尊老爱幼的让位子的规则，我当然也是非常乐于遵守这个规则，但是就是由于不开口说话，让座这件事情都没法完成，如果我在坐着，多数情况下就把头低着“睡觉”，别人看了还以为我是不想让位而进行装睡，她们哪里知道我这奇葩的原因。如果我是站着的话，我反而是庆幸了。。。，站着反而快乐。另外，我也常有“不尊重”的表现，上课“不积极”的表现等等。不过，在当时那个年代，学习好能抵过一切，只要学习好再多的缺点也是优点，我就这样一直闷到了大学。</p>
+<p>进入大学以后，口齿不伶俐这件事情显的原来越重要，因为很多时候需要在公共场合下发言，需要有更多的社交，就算是处对象也需要一个能交流的对话能力。一般我在公共发言的时候，说非常少的话，讲的也很快，囫囵吞枣，听者可能都不知道是怎么回事就过去了。当然，也由于这些表现，我逐渐地意识岛这个问题的重要性，而且有些非常要好的同学也给我提出了我的这个毛病。（似乎，我有时候说话，她们都是在半猜半听懂的情况下和我进行交流的，惭愧）</p>
+<p>进入研究生阶段，这个问题简直如井喷一样地爆发了，组内经常有presentation，有访客来，需要介绍，有集体讨论等等，每次由于说话不清楚，碰壁很多次。于是，认识岛这个问题的极度重要性后，决定要解决这个问题。不过先天不足和二十年来的积习想要马上改过来，谈何容易阿。由于我的说话问题是全方面的，所以要从最最基本的方面进行训练。</p>
+<h3 id="吐字训练"><a href="#吐字训练" class="headerlink" title="吐字训练"></a>吐字训练</h3><p>首先，我从我的吐字和气息开始训练，这个毛病最开始是曹博在我大四的时候跟我说起过，确实我有时候说话发音很混沌。练习吐词，看的是殷亚敏的系列教程，当然也有其他的教程，我自己练习的最多的还是绕口令，“四和十”，“黑化肥 &amp; 灰化肥”，“红凤凰 &amp; 黄凤凰”等经典段子，把这些绕口令说的清清楚楚不是一件简单的事情，而且很重要的一件事是要保证质量，所以，我都是把录音程序开着，边说边录，录完在听自己的声音，一开始被自己的声音吓到，后来说多了口齿还是好一些。<a href="http://115.28.13.176/blog/?p=476" target="_blank" rel="external">详情戳这里</a>。</p>
+<h3 id="文字训练"><a href="#文字训练" class="headerlink" title="文字训练"></a>文字训练</h3><p>说话不仅是发音，还要有逻辑完整，思路清晰，如果思路不清不楚，说起话来也是磕磕畔畔，甚至出现混音的情况。这一项其实也是我的缺点，没人跟我提及过，但我很清楚，很多时候我说着说着都不知道用什么词语了（这一点恐怕和我一直的理科生路线有关）。所以我首先通过阅读来加强文字功底，买了一些经典读物，比如钱的《围城》，余华的《活着》，三毛的《梦里花落知多少》等等，这些都看了一遍，以前我非常不喜欢看书，只有电影这样生动的表达能吸引我，但是同时也丧失了对文字能力的训练。看完这些书，我发现看书也不是一件非常糟糕的体验，并且随着看的数量的增加，发现越来越喜欢读书了，同时经验告诉我，读少量几本和没读没有多少区别，并且不能理解书中文字的魅力和故事的意义，只有当读过一定数量后才能明白其中有趣的地方。每次读完一本书，我的大脑都非常活跃，一般都能天花乱坠的想到很多事情，有的没的，有道理的，没道理的。</p>
+<p>讲话逻辑这一块也是重要的，这里就要有一个思想在脑子里，就是讲话不是讲给自己听，说出来的话要考虑到听众对背景知识的了解，不能讲故事进行跳跃式叙述。这方面我觉得比较好的是赵鹤之的培训视频，主讲人幽默、有亲和力，也有道理，<a href="http://115.28.13.176/blog/?p=952" target="_blank" rel="external">小总结戳这里</a>。</p>
+<h3 id="语调训练"><a href="#语调训练" class="headerlink" title="语调训练"></a>语调训练</h3><p>我还有一个毛病，说话没有节奏，不抑扬顿挫，听众不能抓住重点，这个缺点研究生同学给我提过，其实我说话音量也小（后来改了）。这个问题，我最近才找到解决办法，因为我从研究生入学以来就开始玩吉他，但是唱歌一直很难听，一直也不知道是什么原因，开始还只是以为我的高音上不去（经常在高潮处乱吼，破音）。最近，我在尝试扒歌，扒歌扒的不准，但是有有几分相似，音调的上浮和下降都少了一些，然后遍开始练习音阶，练过音阶之后，唱歌比以前好了，之前音域窄，但是自己没有察觉。所以，练习音阶能很有效地解决我的这个问题。</p>
+<p>以上就是我的说话解决方案，我自己正在践行这些方法，有一定的效果，我要更加持久的进行这些练习，我相信以后会取得非常好的效果。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;记得我问过我母亲这样一个问题，“我开口说话的时间是不是在同龄人中算早的？”，本以为会得到一个肯定的答复，结果却得到了恰恰相反的答案，我的说话时间比较晚。当时没有仔细去想，也许小孩子的智力发育水平和说话的时间没有直接的关系，不过现在看来，有一点是可以肯定的：那就是我比较笨。&lt;
+    
+    </summary>
+    
+      <category term="Social training" scheme="http://yoursite.com/categories/Social-training/"/>
+    
+    
+      <category term="语言" scheme="http://yoursite.com/tags/%E8%AF%AD%E8%A8%80/"/>
+    
+  </entry>
+  
+</feed>
