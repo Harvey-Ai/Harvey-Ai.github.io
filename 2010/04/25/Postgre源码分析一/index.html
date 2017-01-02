@@ -30,10 +30,10 @@ Node       *havingClause;    /* HAVING conditional-expression */
 List       *windowClause;    /* WIN
                                     ...
 </code></pre><p>}<br><br>注意比较两个节点的共同点，第一个数据类型都是NodeTag，那么在Postgre中，传递的参数都是Node节点，再根据Node的类型进行转换，如：SelectStmt（node)，这样使用方便，便于参数传递，但是注意，这样封装再传递只能使用指针，否则作为参数，直接将node压到数据栈上不会保留如selectStmt后面的数据。</p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2010/04/25/Postgre源码分析一/" data-id="cixfx5zg60052ip9kurlp0egu" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Postgre/">Postgre</a><a href="/tags/数据结构/">数据结构</a></div><div class="post-nav"><a href="/2010/04/26/十个利用矩阵乘法解决的经典题目/" class="pre">十个利用矩阵乘法解决的经典题目</a><a href="/2010/04/19/一个小问题，just for fun/" class="next">一个小问题，just for fun</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2010/04/25/Postgre源码分析一/" data-id="cixfxemme0057nd9kno0baemh" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Postgre/">Postgre</a><a href="/tags/数据结构/">数据结构</a></div><div class="post-nav"><a href="/2010/04/26/十个利用矩阵乘法解决的经典题目/" class="pre">十个利用矩阵乘法解决的经典题目</a><a href="/2010/04/19/一个小问题，just for fun/" class="next">一个小问题，just for fun</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
 var disqus_identifier = '2010/04/25/Postgre源码分析一/';
 var disqus_title = 'Postgre源码分析一';
-var disqus_url = 'http://yoursite.com/2010/04/25/Postgre源码分析一/';
+var disqus_url = 'http://harvey-ai.github.io/2010/04/25/Postgre源码分析一/';
 (function() {
   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';

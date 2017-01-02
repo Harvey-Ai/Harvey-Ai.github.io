@@ -26,10 +26,10 @@
 <p>正确定义如下:</p>
 <p><pre>Union {<br>struct cmsghdr cm;<br>char data[CMSG_SPACE(sizeof(int))];<br>} cmsg;<br></pre><br>另外在读写进程里 Select 还要设成非阻塞,否则没法接受新连接。<br>还有 <span style="color: #800000;">(</span>connfd = accept(sockfd, (sockaddr *)&amp;connAddr, &amp;connAddrLen)<span style="color: #800000;">)</span> &gt; 0) ,加红的括号一定要有,<br>否则由于 = 优先级低于 &gt; , connfd 始终等于 1 。</p>
 <p>代码请戳：<a href="https://github.com/Harvey-Ai/System/tree/master/socket/multThreadSocket" target="_blank" rel="external">多进程器服务器</a>，<a href="https://github.com/Harvey-Ai/System/tree/master/socket/selectSocket" target="_blank" rel="external">Select 服务器</a></p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2015/09/02/网络模型之多进程模型，Select模型/" data-id="cixfx5zma00f9ip9k7djnhift" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Select模型/">Select模型</a><a href="/tags/多进程模型/">多进程模型</a><a href="/tags/文件描述符/">文件描述符</a></div><div class="post-nav"><a href="/2015/09/03/网络模型之Epoll模型/" class="pre">网络模型之Epoll模型</a><a href="/2015/08/26/两道几何题/" class="next">两道几何题</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2015/09/02/网络模型之多进程模型，Select模型/" data-id="cixfxemsz00fbnd9k9uadwfbh" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Select模型/">Select模型</a><a href="/tags/多进程模型/">多进程模型</a><a href="/tags/文件描述符/">文件描述符</a></div><div class="post-nav"><a href="/2015/09/03/网络模型之Epoll模型/" class="pre">网络模型之Epoll模型</a><a href="/2015/08/26/两道几何题/" class="next">两道几何题</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
 var disqus_identifier = '2015/09/02/网络模型之多进程模型，Select模型/';
 var disqus_title = '网络模型之多进程模型，Select模型';
-var disqus_url = 'http://yoursite.com/2015/09/02/网络模型之多进程模型，Select模型/';
+var disqus_url = 'http://harvey-ai.github.io/2015/09/02/网络模型之多进程模型，Select模型/';
 (function() {
   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';

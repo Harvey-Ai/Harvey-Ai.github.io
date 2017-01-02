@@ -3,10 +3,10 @@
 <p>一种算法是采用线段树，即在线段树的每个节点保存该区间的最大值与最小值，O(n)的预处理时间（需要自底向上构建），可以O(logn)地回答每个问题。</p>
 <p>另一种算法就是神奇的ST算法（Sparse Table） ，以求最大值为例，设v[n][f]表示[n,n+2^f)这个区间内的最大值，那么在询问到[a,b)区间的最大值时答案就是max(v[a][f],v[b-2^f][f])，其中f是满足2^f&lt;=b-a的最大的f。至于那张稀疏表，可以用递推的方法在O(nlogn)（也就是表的元素数）的时间内构建。也就是说v[n][f]=max(v[n][f-1],v[n+2^(f-1)][f])。</p>
 <p>pku上一道rmq问题：<a href="http://acm.pku.edu.cn/JudgeOnline/problem?id=3264" target="_blank" rel="external">http://acm.pku.edu.cn/JudgeOnline/problem?id=3264</a></p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2007/10/30/RMQ问题/" data-id="cixfx5zg70056ip9kuciw5t0f" class="article-share-link">分享到</a><div class="tags"><a href="/tags/RMQ/">RMQ</a></div><div class="post-nav"><a href="/2007/11/07/今天遇到的一个遨游崩溃问题/" class="pre">今天遇到的一个遨游崩溃问题</a><a href="/2007/09/30/What's wrong with me?/" class="next">What's wrong with me?</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2007/10/30/RMQ问题/" data-id="cixfxemmc0053nd9kn2xf1omu" class="article-share-link">分享到</a><div class="tags"><a href="/tags/RMQ/">RMQ</a></div><div class="post-nav"><a href="/2007/11/07/今天遇到的一个遨游崩溃问题/" class="pre">今天遇到的一个遨游崩溃问题</a><a href="/2007/09/30/What's wrong with me?/" class="next">What's wrong with me?</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
 var disqus_identifier = '2007/10/30/RMQ问题/';
 var disqus_title = 'RMQ问题';
-var disqus_url = 'http://yoursite.com/2007/10/30/RMQ问题/';
+var disqus_url = 'http://harvey-ai.github.io/2007/10/30/RMQ问题/';
 (function() {
   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';

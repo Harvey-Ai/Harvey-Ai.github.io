@@ -2,10 +2,10 @@
 <p>相对于Select，Epoll最大的好处就是用回调来处理可用的连接，省去了轮询带来的操作浪费。Epoll的触发方式有两种：水平触发和边缘触发，水平触发是状态触发，只要符合指定状态都会触发，而边缘触发只发生在状态转换的地方。使用边缘触发可以让时间资源最大化，不过要小心处理读写，否则会出现一直不能写或读的连接。</p>
 <p>原理很简单，我用一个进程实现了所有的操作，给监听socket添加读可用事件，给连接socket添加读可用进程，使用边缘触发机制回调事件。我一开始给连接socket也添加了写可用事件，但是发现，服务器一直不写，原因是当一次写完后，如果此时没有数据要写，那么由于是边缘触发，以后在也不会触发的机会。所以，我用轮询的方式来处理写，维护一个需要写的连接集合，对集合内的每个连接尝试进行非阻塞写。实现过程中只遇到这一个困难。</p>
 <p>代码猛戳：<a href="https://github.com/Harvey-Ai/SystemRep/tree/master/socket/epollSocket" target="_blank" rel="external">点击打开链接</a>。</p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2015/09/03/网络模型之Epoll模型/" data-id="cixfx5zm600f4ip9kb7zf5sdu" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Epoll/">Epoll</a><a href="/tags/Socket/">Socket</a><a href="/tags/服务器/">服务器</a></div><div class="post-nav"><a href="/2015/09/06/秋至/" class="pre">秋至</a><a href="/2015/09/02/网络模型之多进程模型，Select模型/" class="next">网络模型之多进程模型，Select模型</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2015/09/03/网络模型之Epoll模型/" data-id="cixfxemst00f2nd9k0ljjuhb1" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Epoll/">Epoll</a><a href="/tags/Socket/">Socket</a><a href="/tags/服务器/">服务器</a></div><div class="post-nav"><a href="/2015/09/06/秋至/" class="pre">秋至</a><a href="/2015/09/02/网络模型之多进程模型，Select模型/" class="next">网络模型之多进程模型，Select模型</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
 var disqus_identifier = '2015/09/03/网络模型之Epoll模型/';
 var disqus_title = '网络模型之Epoll模型';
-var disqus_url = 'http://yoursite.com/2015/09/03/网络模型之Epoll模型/';
+var disqus_url = 'http://harvey-ai.github.io/2015/09/03/网络模型之Epoll模型/';
 (function() {
   var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
   dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
