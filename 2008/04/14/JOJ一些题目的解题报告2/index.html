@@ -1,0 +1,123 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="记一些东西"><title>JOJ一些题目的解题报告2 | Harvey's Notes</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">JOJ一些题目的解题报告2</h1><a id="logo" href="/.">Harvey's Notes</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">JOJ一些题目的解题报告2</h1><div class="post-meta">Apr 14, 2008<span> | </span><span class="category"><a href="/categories/Algorithm/">Algorithm</a></span></div><a data-disqus-identifier="2008/04/14/JOJ一些题目的解题报告2/" href="/2008/04/14/JOJ一些题目的解题报告2/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>2443: Confused<br>n为排列元素个数，m为给定逆序数<br>主要用到了这个公式：f(n+1,m)=f(n,m)+f(n,m-1)+…+f(n,m-n)<br>(注:记b&lt;0时，f(a,b=0)</p>
+<p>2442: Be efficient<br>面积=(s(s-a)(s-b)(s-c))开平方根，化简后sqrt(4A^B^-(A^+B^-C^)^),^为平方</p>
+<p>2440: Balance and poise<br>重量不是很大，开个大数组，DP就可以了</p>
+<p>2439: Simple Equation<br>枚举就可以了</p>
+<p>2437: The grabber<br>题目意思有偏差，思路是二分</p>
+<p>2436: Next Generation Network<br>prim最下生成树</p>
+<p>2435: Dictionary Order<br>字符串处理题目，题目意思要看清楚</p>
+<p>2434: Narcissistic number</p>
+<p>2433: Circle Railway<br>几何题，总长最短则取中位数</p>
+<p>2431: Shift and Increment<br>广搜＋标记</p>
+<p>2430: Same Words<br>字符串匹配题目</p>
+<p>2429: Difference of Square Root<br>一题要求最小的整数x满足sqrt(x)-sqrt(y)=sqrt(n)，就是将n因数分解成a<em>sqrt(b)的形式，其中b没有任何平方的因数，这样x就等于(a+1)</em>(a+1)*b</p>
+<p>2428: Super Prime<br>广搜(以位数为搜索深度)</p>
+<p>2426: Minimize the number<br>逐字扫描，取出允许位中最大的</p>
+<p>2420: Cock and Rabbit<br>有个小陷阱，负数的情况</p>
+<p>2416: Cow Plumbing<br>深搜，但是注意搜索顺序，从大到小，搜索顺序对效率有很大影响</p>
+<p>2412: Divide the finger<br>DP<br>w[i][j]为数i到j位的数字值<br>DP[i][j]=max{DP[k][j-1]*w[k+1][i]} j-2=&lt;k&lt;=i-1,DP[i][j]为0到i拆成j分的最大值</p>
+<p>2411: Division Expression<br>初看题目很迷茫，但是整数几率最大的是第二个做分母，其他的都是分子，然后每次约去最大公约数</p>
+<p>2410: The knight problem<br>广搜</p>
+<p>2401: A hard problem<br>polya定理</p>
+<p>2398: Things could be different after lunch<br>F[N]=C[1,N]<em>F[N-1]+C[2,N]</em>F[N-2]+C[3,N]<em>F[N-3]+……C[N,N]</em>F[N-N];<br>F[0]=1;对本题来说由于数字大，所以C有用加公式计算，然后模</p>
+<p>2391: Words<br>深搜</p>
+<p>2390: Tired Horse<br>深搜</p>
+<p>2389: Maximum Cube<br>最大子段的扩展，两种方法，先枚举一维，再最大子段两维这样比较快，或者先枚举两维，再最大子段一维，虽然数量级上一样，但是系数上差了很多。</p>
+<p>2388: apples<br>排列组合题</p>
+<p>2387: Fix the stick<br>贪心，钉子取可以照顾搞最后点的最远的钉子，像LRJ的山上灯那题</p>
+<p>2386: Find the Coin<br>三分树</p>
+<p>2385: Treasure On the Chessboard<br>DP,数据很是诡异，Treasure竟然可能是负数</p>
+<p>2359: Prime Before 2007<br>筛选法</p>
+<p>2357: Median Number<br>2356: Maximum Number</p>
+<p>2355: Unitary Quadratic Equation<br>解二次方程公式</p>
+<p>2351: Infinite Recurring Decimal<br>两个要素，余数，除数，如果两个都一样，则产生了循环，注意可能产生long long数据</p>
+<p>2350: A Emphasized Character<br>DP</p>
+<p>2349: A+B+C=0 Again<br>O(N2),O(N3)都行</p>
+<p>2346: Cut Cake<br>二分解超越方程</p>
+<p>2343: Sing a Song<br>jesph环，模拟，循环群定理都行</p>
+<p>2341: How Many Ways<br>DP，需要大数的处理</p>
+<p>2329: Maximal<br>排序，然后依次扫描连续3个数，原因是1，最大性满足2，三角形可能性最大</p>
+<p>2328: Divide<br>筛选</p>
+<p>2323: Multiplication Table</p>
+<p>2321: Saddle point<br>二维的最大子段问题</p>
+<p>2318: Diamond<br>2315: Score Interval</p>
+<p>2314: Tri Tiling<br>递推，每次扩展两个方格</p>
+<p>2309: Betting Strategy</p>
+<p>2306: Marriage<br>归并求逆序数</p>
+<p>2305: Answer I<br>欧拉函数，筛选应该也可以吧</p>
+<p>2303: Brownie Points I</p>
+<p>2285: Decompose<br>DP arr[i]表示i拆分后乘积最大，arr[i]=max{arr[i-j]*j}</p>
+<p>2282: The Minimum Integer</p>
+<p>2278: Count the Squares<br>数学题</p>
+<p>2277: It’s an apple</p>
+<p>2275: You kown, and this is normal<br>题目要看好</p>
+<p>2274: Is it easy?</p>
+<p>2256: Frog &amp; Bridge<br>DP</p>
+<p>2255: Bus Tickets</p>
+<p>2252: Pick Balls<br>数学题目</p>
+<p>2250: My Friends<br>广搜，深搜都行</p>
+<p>2248: Sequence<br>插值定理</p>
+<p>2243: Endless Carry<br>F[i]第i位(从低位开始)为1，付出的F(i-1)*2+1;正好比此位的权值小一</p>
+<p>2241: Nim Matrix<br>考验你的观察力，我看别人的代码的</p>
+<p>2237: Hero Ranklist<br>先floyd预处理一下，再深搜</p>
+<p>2235: Hero Pedigree<br>floyd</p>
+<p>2230: Peter’s smokes<br>模拟</p>
+<p>2223: A Bug’s Life<br>深搜或者并查集，深搜的话要注意可能出现多个连通图</p>
+<p>2218: Stamps</p>
+<p>2205: Stock Graph</p>
+<p>2201: Prime and Decompounding<br>像staircase二维DP就可以了</p>
+<p>2200: Fracions<br>表格DP，dp[i][j]表示i/j最小sum</p>
+<p>2199: The Lost Number<br>2197: Perfect Set<br>2188: Reverse The Sequence</p>
+<p>2185: Adding 1s, 2s, and 3s<br>DP,dp[i]=dp[i-1]+dp[i-2]+dp[i-3]</p>
+<p>2184: Word Reversal</p>
+<p>2183: Fibonacci Number<br>Fibonacci有很多性质</p>
+<p>2182: Destroy the Web<br>深搜＋深度标记</p>
+<p>2181: Hateful boy<br>DP</p>
+<p>2180: Happy birthday</p>
+<p>2179: Dividable<br>n^k=(n-1+1)^k</p>
+<p>2177: A piece of bone</p>
+<p>2175: Superior<br>LCA问题，转化为RMQ更好</p>
+<p>2174: Accumulator<br>&amp; 按位与 | 按位或 ^ 按位异或 ~ 取反<br>&lt;&lt; 左移 &gt;&gt; 右移 1<br>&lt;&lt;=m,&gt;&gt;=m,左移m或右移m</p>
+<p>2173: Sum in Set<br>这样的题目很多O(2)</p>
+<p>2172: Digits in Factorial<br>n!的位数＝log(1)+log(2)+…..log(n)取天棚,10为底</p>
+<p>2171: An Easy Problem!<br>DP</p>
+<p>2170: Travel<br>DP,贪心估计也行</p>
+<p>2168: Apple</p>
+<p>2167: Get the Water<br>直线与圆之间最短距离(多种情况)</p>
+<p>2163: The Matrix<br>排序就OK了，有点诡异，scanf(“%s”)就不行</p>
+<p>2162: Inuyasha And the Monsters<br>DP</p>
+<p>2160: Macro<br>子串处理</p>
+<p>2157: Draw Pictures!<br>2156: Drunk<br>2155: Copy<br>2154: Hungry Rabbits<br>2152: A Special Sorting<br>2151: What’s the Difference ?</p>
+<p>2136: A Simple Wildcard Problem<br>深搜，剪枝，去除多连续个*的出现</p>
+<p>2135: Round Up by Six<br>测试数据有问题</p>
+<p>2129: Perfect Pth Powers<br>暴力就可以了，图像太搞</p>
+<p>2107: Red and Black<br>floodfill四连通</p>
+<p>2104: Paths on a Grid<br>DP或组合</p>
+<p>2098: All in All<br>子串匹配问题，KMP</p>
+<p>2095: Doubles<br>用数组标记就可以了</p>
+<p>2090: Clay Bully<br>2066: Compress<br>2064: Function</p>
+<p>2062: Sum II<br>sharang 说用树状数组写，我用的方法是先枚举二维，再二分一维；复杂度都是O(n3)</p>
+<p>2061: How Many Trees<br>不懂，只知道公式</p>
+<p>2058: Find the Section<br>最大子段问题，DP</p>
+<p>2056: Jojer’s Story IV<br>DP</p>
+<p>2051: Approximate Square Root<br>诡异</p>
+<p>2049: Ackermann’s Function<br>深搜</p>
+<p>2042: Program Calculus</p>
+<p>2035: Leaf Nodes<br>先遍历后根次序，第一个一定为叶子，然后依次检测，如果，该点再先根中再当前节点后面，则为叶子节点，同时更新。小技巧，保存先根中的次序。</p>
+<p>2033: Towers of Hanoi<br>字符处理</p>
+<p>2032: Personal Information<br>无语</p>
+<p>2026: Divide the Birthday Cake<br>DP dp[i]为i边形划分数</p>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2008/04/14/JOJ一些题目的解题报告2/" data-id="cixfwilms003nbs9ko226h9bc" class="article-share-link">分享到</a><div class="tags"><a href="/tags/JOJ/">JOJ</a></div><div class="post-nav"><a href="/2008/05/10/校赛结束了!/" class="pre">校赛结束了!</a><a href="/2008/03/17/JOJ 1028 Dividing Up详解/" class="next">JOJ 1028 Dividing Up详解</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+var disqus_identifier = '2008/04/14/JOJ一些题目的解题报告2/';
+var disqus_title = 'JOJ一些题目的解题报告2';
+var disqus_url = 'http://yoursite.com/2008/04/14/JOJ一些题目的解题报告2/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//harveyai.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/03/21/写代码，养成好习惯/">写代码，养成好习惯。</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/18/一个面试题/">一个面试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/04/2015年总结/">2015年总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/赠人玫瑰，手有余香/">赠人玫瑰，手有余香</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/秋晨/">秋晨</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/26/Srm667 DIV2/">Srm667 DIV2</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/06/秋至/">秋至</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/03/网络模型之Epoll模型/">网络模型之Epoll模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/02/网络模型之多进程模型，Select模型/">网络模型之多进程模型，Select模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/08/26/两道几何题/">两道几何题</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/">DevTool</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/System/">System</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/">Engineer</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Language/">Language</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Operation/">Operation</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Entertainment/">Entertainment</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Language/">Language</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Language/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Life/">Life</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Life/Science/">Science</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/">Literature</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Math/">Math</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Music/">Music</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/">Operation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Poem/">Poem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Repost/">Repost</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Science/">Science</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Social-training/">Social training</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://github.com/Harvey-Ai" title="GitHub" target="_blank">GitHub</a><ul></ul><a href="http://weibo.com/ufo008ahw" title="weibo" target="_blank">weibo</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Harvey's Notes.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

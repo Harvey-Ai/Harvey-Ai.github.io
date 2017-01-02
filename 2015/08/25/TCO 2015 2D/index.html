@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="记一些东西"><title>TCO 2015 2D | Harvey's Notes</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">TCO 2015 2D</h1><a id="logo" href="/.">Harvey's Notes</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">TCO 2015 2D</h1><div class="post-meta">Aug 25, 2015<span> | </span><span class="category"><a href="/categories/Algorithm/">Algorithm</a></span></div><a data-disqus-identifier="2015/08/25/TCO 2015 2D/" href="/2015/08/25/TCO 2015 2D/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>250分题：给一段只有‘0’，‘1’构成的字符串，然后给出串上平衡点的定义：在串上找到某个点（位置是p），这个点将串分成左右两部分（可以为空），左右分别计算字符的值的和，如果左边有字符是‘1’，那么字符值加上当前位置（i）与平衡点位置的距离（p - i)，同理计算右边，如果左右的字符值相等，则就是平衡点。举例：100111是一个中第二个1将串分成100和11，左右的值都是3，是平衡点。</p>
+<p>问这段’0’, ‘1’字符串中能找到多少个包含平衡点的子串?<br>串长度 &lt; 2500</p>
+<p>解析：看数据量是一个不能超过O(N^3)的题目，所以不能枚举子串的头尾，然后再枚举每一个点是否是平衡点。这题有很多种做法，可以枚举枚举平衡点的位置，也可以枚举子串，再检测子串是不是含有平衡点。</p>
+<p>枚举平衡点的做法是先枚举每个点位置作为平衡点，然后分别扫描左边，记录所有值出现的次数，然后再扫描右边，计算字符值，如果左边出现了相同的字符值，就是一个含有平衡点的子串，所以结果加上左边出现当前字符值的次数。这样计算的复杂度是O(N^2 * logN)，时间没有问题，但是有一个trick，就是枚举的是平衡点，算子串的时候会有重复计算，想一下可以发现，只有全’0’的字符串中的平衡点可以任意移动，其他字符串要么没有平衡点，要么仅有一个平衡点，所以这里要小心处理0的情况，比赛的时候脑袋蒙全，一直没理清楚。</p>
+<p>另外一种就是枚举子串，一旦确定子串就要在非常短的时间内判断子串是否包含平衡点，想一下，’平衡点’如果在串中移动会有什么效果（假定向右）：</p>
+<ul>
+<li>左边的值 += 左边‘1’的个数</li>
+<li>右边的值 -= 右边‘1’的个数<br>结果就是左值 – 右值加上了全部‘1’的个数，反向移动就是减去全部‘1’的个数。考虑另外一个事实:’平衡点’左端点时，左值 – 右值 &lt;= 0;右边,左值 – 右值 &gt;= 0;加上前面的推论，点在串中移动如果存在 左值 – 右值 == 0的情况，左值 – 右值一定是串中’1’个数的倍数。端点处的左右值差用前缀和，’1’个数也用前缀和来求，这样得到复杂度为O(N^2)的算法。</li>
+</ul>
+<p>还有另外O(N^2)的算法，也挺优美，不再表述，可以通过右（左）值的单调性，来移动平衡点。</p>
+<p>法一代码：</p>
+<pre>class BalancedSubstrings {
+    public:
+    int countSubstrings(string s) {
+        int res = 0;
+
+        for(int i = 0;i &lt; s.size();i++) {
+            int sum = 0;
+            map&lt;int, int&gt; sumMap;
+            sumMap[0] = 1;
+            for(int j = i - 1;j &gt;= 0;j--) {
+                if (s[j] == '1') {
+                    sum += (i - j);
+                }
+                if (sumMap.find(sum) == sumMap.end()) {
+                    sumMap[sum] = 1;
+                } else {
+                    sumMap[sum]++;
+                }
+            }
+
+            sum = 0;
+            res += sumMap[0];
+            for(int j = i + 1;j &lt; s.size();j++) {
+                if (s[j] == '1') {
+                    sum += (j - i);
+                }
+                if (sum == 0 &amp;&amp; s[i] == '0') {
+                    continue;
+                }
+
+                if (sumMap.find(sum) != sumMap.end()) {
+                    res += sumMap[sum];
+                }
+            }
+        }
+        return res;
+    }
+};</pre>
+法二代码：
+<pre>class BalancedSubstrings {
+    public:
+    int countSubstrings(string s) {
+
+        int sum[2550], cnt[2550];
+        memset(sum, 0, sizeof(sum));
+        memset(cnt, 0, sizeof(cnt));
+        for(int i = 0;i &lt; s.size();i++) {
+            cnt[i + 1] = cnt[i] + (s[i] == '1');
+            sum[i + 1] = sum[i] + (s[i] == '1') * i;
+        }
+
+        int res = 0;
+        for(int i = 0;i &lt; s.size();i++) {
+            for(int j = i;j &lt; s.size();j++) {
+                if (cnt[j + 1] - cnt[i] == 0 || 
+                        (sum[j + 1] - sum[i]) % (cnt[j + 1] - cnt[i]) == 0)
+                    res++;
+            }
+        }
+
+        return res;
+    }
+};</pre>
+500分题：给一个顺序排列的N个箱子，这N个箱子里有连续K个是有东西的箱子，其余的都是空的。某人用最优的方法去确定这K个箱子的位置，问最坏情况下要多少次？
+N，K都是long long。
+
+解析：这种关于策略的问题很烦，如果没有见过类似的题目可能会心理发慌，不过冷静一下，很多问题都是纸老虎。考虑这样一个问题：如果不知道箱子个数，我们如何确定有东西箱子的头呢。想想看能不能用二分呢？答案是否定的，因为如果找到一个空箱子，不能确定有东西箱子是在前面还是后面，那什么时候可以二分呢？知道有K个箱子可以吗？不完全行，因为如果当前二分位置前面有超过K个箱子没有被检测，那我们是不知道前面有没有有东西的箱子的。聪明的读者可能想到，如果箱子数 &lt;= 2K个不就可以了吗？第一次枚举在K处，如果有箱子则向前二分，否则箱子在后面。最有策略就是这样的，至于为什么是二分，因为基于比较的最快的查找就是二分。。
+
+考虑了前面的子问题，如何处理箱子数超过2K的情况呢，超过2K的箱子，我们是不能用二分的，只能用贪心的方法粗略的确定有东西箱子的位置，就是每隔K个箱子检测一次，如果检测到，可以用二分去找到头部。最坏的情况就是剩下2K时还没有找到箱子的位置，最后2K个箱子用二分来确定。这里还有一个小trick，最后K – 1个是不用二分的，他们肯定不是头，直接把这K – 1减去即可。
+
+代码：
+<pre>class BallsInBoxes { 
+    public: 
+    long long maxTurns(long long N, long long K) { 
+        if (N &lt;= K) { 
+            return 0; 
+        } 
+
+        N -= K; 
+        long long left = N - max((N + K - 1) / K - 2, 0LL) * K; 
+        long long res = max((N + K - 1) / K - 2, 0LL); 
+
+        while(left &gt; 0) { 
+            left /= 2; 
+            res++; 
+        } 
+
+        return res; 
+    } 
+};
+</pre></div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2015/08/25/TCO 2015 2D/" data-id="cixfwilo9005kbs9kmns473cj" class="article-share-link">分享到</a><div class="tags"><a href="/tags/TopCoder/">TopCoder</a><a href="/tags/TCO/">TCO</a></div><div class="post-nav"><a href="/2015/08/26/神奇的差速齿轮/" class="pre">神奇的差速齿轮</a><a href="/2015/08/23/做梦/" class="next">做梦</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+var disqus_identifier = '2015/08/25/TCO 2015 2D/';
+var disqus_title = 'TCO 2015 2D';
+var disqus_url = 'http://yoursite.com/2015/08/25/TCO 2015 2D/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//harveyai.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/03/21/写代码，养成好习惯/">写代码，养成好习惯。</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/18/一个面试题/">一个面试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/04/2015年总结/">2015年总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/赠人玫瑰，手有余香/">赠人玫瑰，手有余香</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/秋晨/">秋晨</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/26/Srm667 DIV2/">Srm667 DIV2</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/06/秋至/">秋至</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/03/网络模型之Epoll模型/">网络模型之Epoll模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/02/网络模型之多进程模型，Select模型/">网络模型之多进程模型，Select模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/08/26/两道几何题/">两道几何题</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/">DevTool</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/System/">System</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/">Engineer</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Language/">Language</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Operation/">Operation</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Entertainment/">Entertainment</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Language/">Language</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Language/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Life/">Life</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Life/Science/">Science</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/">Literature</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Math/">Math</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Music/">Music</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/">Operation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Poem/">Poem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Repost/">Repost</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Science/">Science</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Social-training/">Social training</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://github.com/Harvey-Ai" title="GitHub" target="_blank">GitHub</a><ul></ul><a href="http://weibo.com/ufo008ahw" title="weibo" target="_blank">weibo</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Harvey's Notes.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

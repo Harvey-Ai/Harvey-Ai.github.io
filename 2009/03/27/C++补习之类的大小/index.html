@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="记一些东西"><title>C++补习之类的大小 | Harvey's Notes</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">C++补习之类的大小</h1><a id="logo" href="/.">Harvey's Notes</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">C++补习之类的大小</h1><div class="post-meta">Mar 27, 2009<span> | </span><span class="category"><a href="/categories/Language/">Language</a></span></div><a data-disqus-identifier="2009/03/27/C++补习之类的大小/" href="/2009/03/27/C++补习之类的大小/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>初学者在学习面向对象的程序设计语言时，或多或少的都些疑问，我们写的代码与最终生编译成的代码却　大相径庭，我们并不知道编译器在后台做了什么工作．这些都是由于我们仅停留在语言层的原因，所谓语言层就是教会我们一些基本的语法法则，但不会告诉我们为什么这么做？今天和大家谈的一点感悟就是我在学习编程过程中的一点经验，是编译器这方面的一个具体功能．</p>
+<p>首先：我们要知道什么是类的实例化，所谓类的实例化就是在内存中分配一块地址．</p>
+<p>那我们先看看一个例子：</p>
+<pre>
+#include&lt;iostream.h&gt;
+
+class a {};
+class b{};
+class c:public a{
+    virtual void fun()=0;
+};
+class d:public b,public c{};
+int main()
+{
+    cout&lt;&lt;"sizeof(a)"&lt;&lt;sizeof(a)&lt;&lt;endl;
+    cout&lt;&lt;"sizeof(b)"&lt;&lt;sizeof(b)&lt;&lt;endl;
+    cout&lt;&lt;"sizeof(c)"&lt;&lt;sizeof(c)&lt;&lt;endl;
+    cout&lt;&lt;"sizeof(d)"&lt;&lt;sizeof(d)&lt;&lt;endl;
+    return 0;
+}
+</pre>
+
+<p>程序执行的输出结果为：</p>
+<p>sizeof(a) =1</p>
+<p>sizeof(b)=1</p>
+<p>sizeof(c)=4</p>
+<p>sizeof(d)=8</p>
+<p>为什么会出现这种结果呢？初学者肯定会很烦恼是吗？类a，b明明是空类，它的大小应该为为０，为什么　编译器输出的结果为１呢？这就是我们刚才所说的实例化的原因（空类同样可以被实例化），每个实例在内存中都有一个独一无二的地址，为了达到这个目的，编译器往往会给一个空类隐含的加一个字节，这样空类在实例化后在内存得到了独一无二的地址．所以a，b的大小为１．</p>
+<p>而类c是由类a派生而来，它里面有一个纯虚函数，由于有虚函数的原因，有一个指向虚函数的指针（vptr），在３２位的系统分配给指针的大小为４个字节，所以最后得到c类的大小为４．</p>
+<p>类d的大小更让初学者疑惑吧，类d是由类b，c派生迩来的，它的大小应该为二者之和５，为什么却是８　　呢？这是因为为了提高实例在内存中的存取效率．类的大小往往被调整到系统的整数倍．并采取就近的法则，里哪个最近的倍数，就是该类的大小，所以类d的大小为８个字节．</p>
+<p>当然在不同的编译器上得到的结果可能不同，但是这个实验告诉我们初学者，不管类是否为空类，均可被实例化（空类也可被实例化），每个被实例都有一个独一无二的地址．</p>
+<p>我所用的编译器为vc++ 6.0．</p>
+<p>下面我们再看一个例子．</p>
+<pre>
+#include&lt;iostream.h&gt;
+class a{
+pivate:
+    int data;
+};
+
+class b{
+    private:
+        int data;
+        static int data1;
+};
+int b::data1=0;
+void mian(){
+    cout&lt;&lt;"sizeof(a)="&lt;&lt;sizeof(a)&lt;&lt;endl;
+    cout&lt;&lt;"sizeof(b)="&lt;&lt;sizeof(b)&lt;&lt;endl;
+}
+</pre>
+
+<p>执行结果为：</p>
+<p>sizeof(a)=4;</p>
+<p>sizeof(b)=4;</p>
+<p>为什么类b多了一个数据成员，却大小和类a的大小相同呢？因为：类b的静态数据成员被编译器放在程序的一个global data members中，它是类的一个数据成员．但是它不影响类的大小，不管这个类实际产生　了多少实例，还是派生了多少新的类，静态成员数据在类中永远只有一个实体存在，而类的非静态数据成员只有被实例化的时候，他们才存在．但是类的静态数据成员一旦被声明，无论类是否被实例化，它都已存在．可以这么说，类的静态数据成员是一种特殊的全局变量．</p>
+<p>所以a，b的大小相同．</p>
+<p>下面我们看一个有构造函数，和析构函数的类的大小，它又是多大呢？</p>
+<p>#include&lt;iostream.h&gt;<br>class A{<br>    public :<br>        A(int a){<br>            a=x;}<br>        void f(int x){<br>            cout&lt;&lt;x&lt;&lt;endl;}<br>        ~A(){}</p>
+<pre><code>private:
+    int x;
+    int g;
+</code></pre><p>};<br>class B{<br>    public:<br>    private:<br>        int data; int data2;<br>        static int xs;<br>};<br>int B::xs=0;<br>void main(){<br>    A s(10);<br>    s.f(10);<br>    cout&lt;&lt;”sozeof(a)”&lt;&lt;sizeof(A)&lt;&lt;endl;<br>    cout&lt;&lt;”sizeof(b)”&lt;&lt;sizeof(B)&lt;&lt;endl;<br>}<br>程序执行输出结果为：<br>10 ,<br>sizeof(a) 8<br>sizeof(b) 8</p>
+<p>它们的结果均相同，可以看出类的大小与它当中的构造函数，析构函数，以及其他的成员函数无关，只与它当中的成员数据有关．</p>
+<p>从以上的几个例子不难发现类的大小：</p>
+<p>１．为类的非静态成员数据的类型大小之和．</p>
+<p>２．有编译器额外加入的成员变量的大小，用来支持语言的某些特性（如：指向虚函数的指针）．</p>
+<p>３．为了优化存取效率，进行的边缘调整．</p>
+<p>４　与类中的构造函数，析构函数以及其他的成员函数无关．</p>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2009/03/27/C++补习之类的大小/" data-id="cixfwill7001ibs9k1vimilvi" class="article-share-link">分享到</a><div class="tags"><a href="/tags/C/">C</a><a href="/tags/Class/">Class</a></div><div class="post-nav"><a href="/2009/03/27/MySQL中SQL优化和架构设计的一些简单想法【转】/" class="pre">MySQL中SQL优化和架构设计的一些简单想法【转】</a><a href="/2009/03/25/小问题/" class="next">小问题</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+var disqus_identifier = '2009/03/27/C++补习之类的大小/';
+var disqus_title = 'C++补习之类的大小';
+var disqus_url = 'http://yoursite.com/2009/03/27/C++补习之类的大小/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//harveyai.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/03/21/写代码，养成好习惯/">写代码，养成好习惯。</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/18/一个面试题/">一个面试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/04/2015年总结/">2015年总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/赠人玫瑰，手有余香/">赠人玫瑰，手有余香</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/秋晨/">秋晨</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/26/Srm667 DIV2/">Srm667 DIV2</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/06/秋至/">秋至</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/03/网络模型之Epoll模型/">网络模型之Epoll模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/02/网络模型之多进程模型，Select模型/">网络模型之多进程模型，Select模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/08/26/两道几何题/">两道几何题</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/">DevTool</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/System/">System</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/">Engineer</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Language/">Language</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Operation/">Operation</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Entertainment/">Entertainment</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Language/">Language</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Language/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Life/">Life</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Life/Science/">Science</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/">Literature</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Math/">Math</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Music/">Music</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/">Operation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Poem/">Poem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Repost/">Repost</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Science/">Science</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Social-training/">Social training</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://github.com/Harvey-Ai" title="GitHub" target="_blank">GitHub</a><ul></ul><a href="http://weibo.com/ufo008ahw" title="weibo" target="_blank">weibo</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Harvey's Notes.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

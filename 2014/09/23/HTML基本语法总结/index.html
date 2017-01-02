@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="记一些东西"><title>HTML基本语法总结 | Harvey's Notes</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">HTML基本语法总结</h1><a id="logo" href="/.">Harvey's Notes</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">HTML基本语法总结</h1><div class="post-meta">Sep 23, 2014<span> | </span><span class="category"><a href="/categories/Language/">Language</a></span></div><a data-disqus-identifier="2014/09/23/HTML基本语法总结/" href="/2014/09/23/HTML基本语法总结/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>之前有看过<a href="http://www.w3school.com.cn/" target="_blank" rel="external">W3C</a>的HTML教程，不是HTML5的教程，是入门级的东西，就在这里记一笔吧。</p>
+<h2 id="概况"><a href="#概况" class="headerlink" title="概况"></a><strong>概况</strong></h2><p>HTML是标记性语言，语言能力不强，但是对于网页却很合适。HTML通过对标签进行解析，识别网页描述内容。</p>
+<ul>
+<li>HTML是我记忆中<strong>唯一不区分大小写的语言。</strong></li>
+<li>标签用&lt;&gt;标示，注释用&lt;!–This is a comment–&gt;进行标示。</li>
+<li>HTML会忽略连续长度大于一的空格，所有空格被视为一个空格。</li>
+<li>属性需要用双引号进行引用，属性内容本身有双引号时，使用单引号进行引用。</li>
+</ul>
+<h2 id="开头"><a href="#开头" class="headerlink" title="开头"></a><strong>开头</strong></h2><ul>
+<li>文件类型声明：起始部分声明文件类型，HTML5仅用&lt;！DOCTYPE html&gt;就可以，低版本声明文件类型较繁琐。</li>
+<li><p>头声明：用&lt;head&gt;标签进行包含，包括网页信息、访问控制等<strong>元信息</strong> (&lt;meta&gt;)和<strong>引用文件信息</strong>（ &lt;link&gt;引用CSS, &lt;script&gt;引用其他教本）。例如：</p>
+<ul>
+<li>&lt;meta http-equiv=”charset” content=”utf-8” /&gt;，说明网页使用utf-8字符集。</li>
+<li>&lt;link rel=”stylesheet” type=”text/css” href=”./music.css” /&gt;，引用music.css格式文件。</li>
+<li>&lt;script src=’../lib/jquery-2.1.0.min.js’&gt;&lt;/script&gt;，引用jquery的javascript文件。</li>
+</ul>
+</li>
+</ul>
+<h2 id="正文"><a href="#正文" class="headerlink" title="正文"></a><strong>正文</strong></h2><p>正文用&lt;body&gt;标签包含，包括了html整个显示部分和响应逻辑，更细化的处理可能还包括页眉和页脚。现代的HTML一般运用DIV+CSS对网页进行布局，用JavaScript处理交互。</p>
+<h4 id="常用标签"><a href="#常用标签" class="headerlink" title="常用标签"></a><strong>常用标签</strong></h4><p>标签说明了内容的是什么，而具体表现会在CSS中处理。下面列举一些常用的标签。</p>
+<ul>
+<li><p>基本格式：</p>
+<ul>
+<li>&lt;hi&gt;：标题，对不同大小的标题分别有&lt;h1&gt;，&lt;h2&gt;到&lt;h5&gt;。</li>
+<li>&lt;p&gt;：段落。</li>
+<li>&lt;a href = “XXX”, target=”XX”&gt;：链接。</li>
+<li>&lt;img src=”XXX”&gt;：图片。</li>
+<li>&lt;hr /&gt;：水平分割线。</li>
+<li>&lt;br /&gt;：换行。</li>
+<li>&lt;a href=”#anchor1”&gt; 链接 &lt;a name=”anchor1”&gt;Useful Tips Section&lt;/a&gt;： 锚链接。</li>
+<li>&lt;table&gt;：表格，&lt;th&gt;表格头，&lt;caption&gt;标题，&lt;tr&gt;（行），&lt;td&gt;（列）</li>
+</ul>
+</li>
+<li><p>文本样式</p>
+<ul>
+<li>&lt;b&gt;：粗体， &lt;strong&gt;：定义加重语气，&lt;i&gt;：斜体。</li>
+<li>&lt;small&gt;：小号字体，&lt;big&gt;：大号字体。</li>
+<li>&lt;sub&gt;：下标，&lt;sup&gt;：上标，&lt;del&gt;：删除字。</li>
+<li>&lt;code&gt;：代码，&lt;pre&gt;预定义格式。</li>
+</ul>
+</li>
+<li><p>表单</p>
+<ul>
+<li>&lt;input&gt;：输入标签，属性type指定输入区样式。Eg: &lt;input type=”reset” value=”重置”&gt;，指定一个重置按钮。</li>
+<li>&lt;form&gt;：表单，属性action指定表单提交地址，method指定提交方式。Eg: &lt;form name=”input” action=”html_form_action.asp” method=”get”&gt; 指定了表单提交地址和使用get方法提交。</li>
+</ul>
+</li>
+</ul>
+<h4 id="常用属性"><a href="#常用属性" class="headerlink" title="常用属性"></a><strong>常用属性</strong></h4><p>HTML里面除了每个标签自带的属性外，另外可以自定义属性，不过有一些属性比较特殊。</p>
+<ul>
+<li>class：指定元素类别，在CSS和javascript中可以通过”.+class”的形式选择元素。Eg: &lt;p class = “classA”&gt;，通过”.classA”对该段落进行选择。</li>
+<li>id：指定单个元素，在CSS和javascript中可以通过”#+class”的形式选择元素。Eg: &lt;p class = “myP”&gt;，通过”#myP”对该段落进行选择。</li>
+<li>style：指定元素的CSS样式，CSS有两种指定样式的方式，其中一种叫内部样式，通过style进行指定。Eg: &lt;p style = “background: blue;”&gt;，指定段落的背景颜色为蓝色。</li>
+</ul>
+<h4 id="布局处理"><a href="#布局处理" class="headerlink" title="布局处理"></a><strong>布局处理</strong></h4><p>现代HTML的处理是将表现层抽象了出来，具体表现样式是交给CSS处理的，这样在进行布局的基本思路就是：<strong>先确定格式，在对不同的标签进行具体布局。</strong></p>
+<p>按照对空间的需求可以将元素分为：块级元素，行内元素。顾名思义，块级元素占有网页中一块区域（如&lt;div&gt;），行内元素仅占有网页中一行（如&lt;span&gt;）。</p>
+<h4 id="响应处理"><a href="#响应处理" class="headerlink" title="响应处理"></a><strong>响应处理</strong></h4><p>HTML以事件模型对交互进行处理，当事件发生时，可以指定回调函数来对事件进行处理，另外一点需要注意的是，各个浏览器对事件的处理方式不太一样，有冒泡模型和捕捉模型，区别在于事件的发生顺序，前者是自底而上，后者是自上而下。</p>
+<ul>
+<li>onload：指定文档载入。</li>
+<li>onfocus：元素获得焦点。</li>
+<li>onkeypress，onkeydown，onkeyup ： 键盘事件。</li>
+<li>onclick，ondbclick：鼠标单双击事件。</li>
+<li>onchange，onsubmit：元素发生改变事件。</li>
+<li>onmouseout，onmouseover：鼠标移入、移出事件。</li>
+<li>onmousemove，onmousedown，onmouseup：鼠标移动、按下事件。<br>事件的处理函数一般是通过javascript定义，在HTML中使用&lt;script type=”text/javascript”&gt;定义javascript的相关响应函数，在元素的的事件回调中指定响应函数。</li>
+</ul>
+<p>HTML是前端技术的骨架，先搭好了一个HTML就构成了前端的骨干，在通过CSS的样式修饰和javascript的响应，就能构成一个整体的前端部分了。</p>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2014/09/23/HTML基本语法总结/" data-id="cixfwilm9002ubs9kxb485qnj" class="article-share-link">分享到</a><div class="tags"><a href="/tags/HTML/">HTML</a></div><div class="post-nav"><a href="/2014/09/28/九月十九回家探亲/" class="pre">九月十九回家探亲</a><a href="/2014/09/17/动态规划入门/" class="next">动态规划入门</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+var disqus_identifier = '2014/09/23/HTML基本语法总结/';
+var disqus_title = 'HTML基本语法总结';
+var disqus_url = 'http://yoursite.com/2014/09/23/HTML基本语法总结/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//harveyai.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/03/21/写代码，养成好习惯/">写代码，养成好习惯。</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/18/一个面试题/">一个面试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/04/2015年总结/">2015年总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/赠人玫瑰，手有余香/">赠人玫瑰，手有余香</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/秋晨/">秋晨</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/26/Srm667 DIV2/">Srm667 DIV2</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/06/秋至/">秋至</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/03/网络模型之Epoll模型/">网络模型之Epoll模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/02/网络模型之多进程模型，Select模型/">网络模型之多进程模型，Select模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/08/26/两道几何题/">两道几何题</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/">DevTool</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/System/">System</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/">Engineer</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Language/">Language</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Operation/">Operation</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Entertainment/">Entertainment</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Language/">Language</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Language/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Life/">Life</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Life/Science/">Science</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/">Literature</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Math/">Math</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Music/">Music</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/">Operation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Poem/">Poem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Repost/">Repost</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Science/">Science</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Social-training/">Social training</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://github.com/Harvey-Ai" title="GitHub" target="_blank">GitHub</a><ul></ul><a href="http://weibo.com/ufo008ahw" title="weibo" target="_blank">weibo</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Harvey's Notes.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

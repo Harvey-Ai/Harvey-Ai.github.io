@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="记一些东西"><title>查找树总结 | Harvey's Notes</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">查找树总结</h1><a id="logo" href="/.">Harvey's Notes</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">查找树总结</h1><div class="post-meta">Oct 6, 2014<span> | </span><span class="category"><a href="/categories/Algorithm/">Algorithm</a></span></div><a data-disqus-identifier="2014/10/06/查找树总结/" href="/2014/10/06/查找树总结/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>查找树的种类很多，最基本的是二分查找树，然后有为解决平衡性的红黑树和AVL树，然后有为了减小树高的B树和B+树。这些查找树的目的都是为了查找，将数据按树的性状进行组织，便与以后的查找。</p>
+<h3 id="二分查找树"><a href="#二分查找树" class="headerlink" title="二分查找树"></a><strong>二分查找树</strong></h3><p>二分查找树是最基本的，如果没有特殊需求，二分查找树能应付大部分的查找问题。二分查找树将数据组织成二叉树形式，左儿子所在子树中节点都小于当前节点值，而右儿子所在子树中节点都大于当前节点值，所以该树的中根遍历会是一个有序序列。</p>
+<ol>
+<li>所有非叶子结点至多拥有两个儿子（Left和Right）；</li>
+<li>所有结点存储一个关键字；</li>
+<li>非叶子结点的左指针指向小于其关键字的子树，右指针指向大于其关键字的子树；<br><a href="http://115.28.13.176/blog/wp-content/uploads/2014/10/binary-search-tree.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2014/10/binary-search-tree.png" alt=""></a></li>
+</ol>
+<h5 id="二分查找树的查找、插入和删除"><a href="#二分查找树的查找、插入和删除" class="headerlink" title="二分查找树的查找、插入和删除 "></a><strong>二分查找树的查找、插入和删除 </strong></h5><p>二分查找树的查找从根节点开始，如果查找值等于当前节点值就返回，大于则找右根树中查找，小于则在左根树中查找，查找复杂度为O(logN)。</p>
+<p>插入节点就是要找到比插入节点大的第一个位置，复杂度为O(logN)。</p>
+<ol>
+<li>如果查找树中有该节点，则返回；</li>
+<li>如果当前树节点值大于插入节点值，则进入左节点；</li>
+<li><p>如果当前树节点值小于插入节点值，则进入右节点。<br>删除节点比较繁琐，复杂度同样是O(logN)。</p>
+</li>
+<li><p>如果是删除节点是叶子节点，则直接删除。</p>
+</li>
+<li>如果不是叶子节点，需要找出左子节点的最大值节点或者是右子节点的最小值节点来填充被删除节点的位置。<br>有人会问：二分查找树的优点在哪里呢，如果是对一些数据的索引，可以先排序再二分查找阿，这样效率和二分查找树一样阿！重点就在这里，二分查找树的好处就在于他是在线处理，可以随时增减数据，如果换作排序，恐怕是非常难做到的。</li>
+</ol>
+<p><a href="http://115.28.13.176/blog/wp-content/uploads/2014/10/regression-tree.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2014/10/regression-tree.png" alt=""></a></p>
+<h3 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a><strong>红黑树</strong></h3><p>二分查找树是一个非常优秀的数据结构，但是有一个问题，如果数据不均匀可能会产生退化树的现象（如上图右侧），比如插入一个有序数据串，那么得到的树就是一个高度为N的退化树。所以为了解决退化问题，产生了红黑树和AVL树。</p>
+<p>红黑树和AVL树不是完全平衡树，不过仅比平衡树差一点点，基本思想是通过旋转来调整高度，使得树变得平衡。</p>
+<h3 id="AVL树"><a href="#AVL树" class="headerlink" title="AVL树"></a><strong>AVL树</strong></h3><h3 id="B树"><a href="#B树" class="headerlink" title="B树"></a><strong>B树</strong></h3><p>在计算机中经常会碰到这样一类问题，就是I/O瓶颈问题，B树就是为了解决I/O问题而产生的。在数据库中，底层数据也是要用一些结构来存储，显然不能线形存储，可是如果用二分查找树来组织的话，更深入一层就相当于一次I/O，没有控制树高的二分查找树可能会造成大量I/O，导致查询缓慢。</p>
+<p>如何解决这个问题，B树应运而生，B树是一棵多路查找树，每个节点的儿子节点有K个，树高比较矮，节点比较胖，这样使得查找深度很小，从而解决了I/O的问题。</p>
+<p>B树定义如下：</p>
+<ol>
+<li>定义任意非叶子结点最多只有M个儿子；且M&gt;2；</li>
+<li>根结点的儿子数为[2, M]；</li>
+<li>除根结点以外的非叶子结点的儿子数为[M/2, M]；</li>
+<li>每个结点存放至少M/2-1（取上整）和至多M-1个关键字（至少2个关键字）；</li>
+<li>非叶子结点的关键字个数=指向儿子的指针个数-1；</li>
+<li>非叶子结点的关键字：K[1], K[2], …, K[M-1]；且K[i] &lt; K[i+1]；</li>
+<li>非叶子结点的指针：P[1], P[2], …, P[M]；其中P[1]指向关键字小于K[1]的子树，P[M]向关键字大于K[M-1]的子树，其它P[i]指向关键字属于(K[i-1], K[i])的子树；</li>
+<li>所有叶子结点位于同一层；<br>如（M=3）：</li>
+</ol>
+<p><a href="http://115.28.13.176/blog/wp-content/uploads/2014/10/B-tree.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2014/10/B-tree.png" alt=""></a></p>
+<p>B树有一些特性：</p>
+<ol>
+<li>关键字集合分布在整颗树中；</li>
+<li>任何一个关键字出现且只出现在一个结点中；</li>
+<li>搜索有可能在非叶子结点结束；</li>
+<li>其搜索性能等价于在关键字全集内做一次二分查找；</li>
+<li>自动层次控制；</li>
+</ol>
+<h5 id="B树的查找、插入、删除"><a href="#B树的查找、插入、删除" class="headerlink" title="B树的查找、插入、删除"></a><strong>B树的查找、插入、删除</strong></h5><p>B树的查找很简单，就是依次在每个节点上进行二分查找，如果没找到且有子区间包含该关键字，则进入儿子节点进行再查找；如果没有子区间包含该关键字则退出，查找失败。查找的复杂度为O(logN)。</p>
+<p>B树的插入和删除比较复杂，因为有节点关键词个数的限制，所以有分裂和合并的操作，当被插入的节点已满时，将节点分裂成2个占M/2的结点，当删除节点时， 需将两个不足M/2的兄弟进行合并。</p>
+<h3 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a><strong>B+树</strong></h3><p>B+树是B树的变体，也是一种多路查找树，解决的问题也是树高的问题。与B树不同的是，B+树将关键词都下放到叶子节点，树中节点的关键词只做索引使用可能并未出现。所以，查找过程中，不可能出现再非叶节点上查找失败的情况，只有当找到叶子节点没有找到才能说明查找失败。<br>另外一方面就是，B+树的叶子节点在同一层，然后B+树增加了一个链表将所有叶子节点串联起来，形成一个有序链表。<br>如（M=3）：</p>
+<p><a href="http://115.28.13.176/blog/wp-content/uploads/2014/10/B-tree1.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2014/10/B-tree1.png" alt=""></a></p>
+<p>B+的特性：</p>
+<ol>
+<li>所有关键字都出现在叶子结点的链表中（稠密索引），且链表中的关键字恰好是有序的；</li>
+<li>不可能在非叶子结点命中；</li>
+<li>非叶子结点相当于是叶子结点的索引（稀疏索引），叶子结点相当于是存储（关键字）数据的数据层；</li>
+<li>更适合文件索引系统；</li>
+</ol>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a><strong>小结</strong></h3><ol>
+<li>二分查找树：二叉树，每个结点只存储一个关键字，等于则命中，小于走左结点，大于走右结点。</li>
+<li>红黑树：</li>
+<li>AVL树：</li>
+<li>B树：多路搜索树，每个结点存储M/2到M个关键字，非叶子结点存储指向关键字范围的子结点；所有关键字在整颗树中出现，且只出现一次，非叶子结点可以命中。</li>
+<li>B+树：在B-树基础上，为叶子结点增加链表指针，所有关键字都在叶子结点中出现，非叶子结点作为叶子结点的索引；B+树总是到叶子结点才命中。</li>
+</ol>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2014/10/06/查找树总结/" data-id="cixfwilt600dobs9kmrwwonj9" class="article-share-link">分享到</a><div class="tags"><a href="/tags/AVL树/">AVL树</a><a href="/tags/B树/">B树</a><a href="/tags/二分查找树/">二分查找树</a><a href="/tags/红黑树/">红黑树</a></div><div class="post-nav"><a href="/2014/11/25/浮萍/" class="pre">浮萍</a><a href="/2014/10/06/线段数总结/" class="next">线段数总结</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+var disqus_identifier = '2014/10/06/查找树总结/';
+var disqus_title = '查找树总结';
+var disqus_url = 'http://yoursite.com/2014/10/06/查找树总结/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//harveyai.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/03/21/写代码，养成好习惯/">写代码，养成好习惯。</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/18/一个面试题/">一个面试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/04/2015年总结/">2015年总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/赠人玫瑰，手有余香/">赠人玫瑰，手有余香</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/秋晨/">秋晨</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/26/Srm667 DIV2/">Srm667 DIV2</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/06/秋至/">秋至</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/03/网络模型之Epoll模型/">网络模型之Epoll模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/02/网络模型之多进程模型，Select模型/">网络模型之多进程模型，Select模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/08/26/两道几何题/">两道几何题</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/">DevTool</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/System/">System</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/">Engineer</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Language/">Language</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Operation/">Operation</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Entertainment/">Entertainment</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Language/">Language</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Language/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Life/">Life</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Life/Science/">Science</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/">Literature</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Math/">Math</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Music/">Music</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/">Operation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Poem/">Poem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Repost/">Repost</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Science/">Science</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Social-training/">Social training</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://github.com/Harvey-Ai" title="GitHub" target="_blank">GitHub</a><ul></ul><a href="http://weibo.com/ufo008ahw" title="weibo" target="_blank">weibo</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Harvey's Notes.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

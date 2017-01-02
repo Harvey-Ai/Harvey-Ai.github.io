@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="记一些东西"><title>一个面试题 | Harvey's Notes</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">一个面试题</h1><a id="logo" href="/.">Harvey's Notes</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">一个面试题</h1><div class="post-meta">Feb 18, 2016<span> | </span><span class="category"><a href="/categories/Algorithm/">Algorithm</a></span></div><a data-disqus-identifier="2016/02/18/一个面试题/" href="/2016/02/18/一个面试题/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>题目描述: 给定一个M * N的矩阵，提供一种操作，每次操作可以将每一行或列改变成X，问操作不超过K次能让矩阵的和最大变为多少？</p>
+<p>输入：矩阵，K，X，(M &lt; 11, N &lt; 200, K &lt; 1000)</p>
+<p>输出： 最大增加值</p>
+<p>举例：<br>|2 4 1|<br>|3 4 5|, K = 1, X = 3<br>显然把第一行改成3，能让矩阵边变的最大，答案是21。</p>
+<p>分析：<br>乍看到题目，可能被题目的行列操作吓到，因为很难确定行列之间的操作会有重叠元素，很难找到策略来分配行列操作。不要慌张，题目里面有个重要的隐藏条件，M &lt; 11，就是说最多只有11行，如果不能找到分配策略的话，可以用暴力的方法，可以枚举出对不同行的操作后，在进行列操作。对列的操作只用贪心就可以，每次找列和最小的列进行操作。枚举行操作有2^10<br>种，所以复杂度就是1024 <em> N </em> Log(N)。</p>
+<p>思路理清楚了，写下代码如下：</p>
+<p><pre>bool cmp(const long long a, const long long b) {</pre></p>
+<pre><code>return a &amp;gt; b;
+</code></pre><p>}</p>
+<p>long long getBitNum(long long n) {</p>
+<pre><code>long long res = 0;
+while(n != 0) {
+    n &amp;amp;= (n - 1);
+    res++;
+}
+return res;
+</code></pre><p>}</p>
+<p>int main() {<br>    long long h, w, x, k;<br>    cin &gt;&gt; h &gt;&gt; w &gt;&gt; x &gt;&gt; k;</p>
+<pre><code>long long rawSum = 0;
+long long res = 0;
+long long board[12][205];
+for(long long i = 0;i &amp;lt; h;i++) {
+    for(long long j = 0;j &amp;lt; w;j++) {
+        cin &amp;gt;&amp;gt; board[i][j];
+        rawSum += board[i][j];
+    }
+}
+res = rawSum;
+
+long long rowBitMax = 1;
+for(long long i = 0;i &amp;lt; h;i++) {
+    rowBitMax *= 2;
+}
+for(long long rowBit = 0;rowBit &amp;lt; rowBitMax;rowBit++) { 
+    long long opNum = getBitNum(rowBit); 
+    if (opNum &amp;gt; k) {
+        continue;
+    }
+
+    long long vVal[205];
+    memset(vVal, 0, sizeof(vVal));
+    for(long long j = 0;j &amp;lt; w;j++) {
+        for(long long i = 0;i &amp;lt; h;i++) {
+            vVal[j] += (x - board[i][j]);
+        }
+    }
+
+    long long sumIncre = 0;
+    long long bitMode = 1;
+    for(long long i = 0;i &amp;lt; h;i++) { 
+        if ((rowBit &amp;amp; bitMode) &amp;gt; 0) {
+            for(long long j = 0;j &amp;lt; w;j++) {
+                sumIncre += (x - board[i][j]);
+                vVal[j] -= (x - board[i][j]);
+            }
+        }
+        bitMode &amp;lt;&amp;lt;= 1;
+    }
+
+    // cout &amp;lt;&amp;lt; sumIncre &amp;lt;&amp;lt; endl;
+    sort(vVal, vVal + 200, cmp);
+    for(long long i = 0;i &amp;lt; (k - opNum) &amp;amp;&amp;amp; i &amp;lt; 200;i++) { 
+        if (vVal[i] &amp;gt; 0) {
+            sumIncre += vVal[i];
+        }
+    }
+    // cout &amp;lt;&amp;lt; sumIncre &amp;lt;&amp;lt; endl;
+    res = max(res, sumIncre + rawSum);
+}
+cout &amp;lt;&amp;lt; res &amp;lt;&amp;lt; endl;
+
+return 0;
+</code></pre><p>}<br><br>提交到OJ上，怎么搞都不对，最后都有点怀疑数据了，思路确认了没有问题，原因出在哪里呢？仔细审查代码之后发现一个重大问题，最后for(long long i = 0; i &lt; (k - opNum);i++) ，这一行中K可能很大，所以i可能超过200，存在数组越界的情况，改成for(long long i = 0;i &lt; (k - opNum) &amp;&amp; i &lt; 200;i++)，再提交，正确。</p>
+<p>这种bug很隐蔽，要非常小心数据的范围，程序不止是逻辑上正确，最终还是反映到对数据的处理上，如果不小心可能一盘好局全盘皆输。</p>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2016/02/18/一个面试题/" data-id="cixfwilp5006tbs9kzymjuklt" class="article-share-link">分享到</a><div class="tags"></div><div class="post-nav"><a href="/2016/03/21/写代码，养成好习惯/" class="pre">写代码，养成好习惯。</a><a href="/2016/01/04/2015年总结/" class="next">2015年总结</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+var disqus_identifier = '2016/02/18/一个面试题/';
+var disqus_title = '一个面试题';
+var disqus_url = 'http://yoursite.com/2016/02/18/一个面试题/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//harveyai.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/03/21/写代码，养成好习惯/">写代码，养成好习惯。</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/18/一个面试题/">一个面试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/04/2015年总结/">2015年总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/赠人玫瑰，手有余香/">赠人玫瑰，手有余香</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/秋晨/">秋晨</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/26/Srm667 DIV2/">Srm667 DIV2</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/06/秋至/">秋至</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/03/网络模型之Epoll模型/">网络模型之Epoll模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/02/网络模型之多进程模型，Select模型/">网络模型之多进程模型，Select模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/08/26/两道几何题/">两道几何题</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/">DevTool</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/System/">System</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/">Engineer</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Language/">Language</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Operation/">Operation</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Entertainment/">Entertainment</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Language/">Language</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Language/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Life/">Life</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Life/Science/">Science</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/">Literature</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Math/">Math</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Music/">Music</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/">Operation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Poem/">Poem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Repost/">Repost</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Science/">Science</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Social-training/">Social training</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://github.com/Harvey-Ai" title="GitHub" target="_blank">GitHub</a><ul></ul><a href="http://weibo.com/ufo008ahw" title="weibo" target="_blank">weibo</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Harvey's Notes.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

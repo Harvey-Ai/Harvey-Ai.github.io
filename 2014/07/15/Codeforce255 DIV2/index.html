@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="记一些东西"><title>Codeforce255 DIV2 | Harvey's Notes</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Codeforce255 DIV2</h1><a id="logo" href="/.">Harvey's Notes</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Codeforce255 DIV2</h1><div class="post-meta">Jul 15, 2014<span> | </span><span class="category"><a href="/categories/Algorithm/">Algorithm</a></span></div><a data-disqus-identifier="2014/07/15/Codeforce255 DIV2/" href="/2014/07/15/Codeforce255 DIV2/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>这次涨了171，快紫了。</p>
+<h3 id="Problem-B-DZY-Loves-Strings"><a href="#Problem-B-DZY-Loves-Strings" class="headerlink" title="Problem B. DZY Loves Strings"></a>Problem B. <span style="color: #222222;">DZY Loves Strings</span></h3><p><span style="color: #222222;">题目大意：给一个字符串，并自定义字符串的值为f(s)，其中<em>Wsi</em>为单个字母的值。</span></p>
+<p><span style="color: #222222;"><img src="http://espresso.codeforces.com/47c9783b69409ca6ade8e93f7d51bed11f430539.png" alt=""></span></p>
+<p>那么如果给定一个字符串S和可以再插入的字母数K，问如何插入K个新字母能使的f(s)最大，给出最大值。</p>
+<p><strong>分析：</strong>显然，插入的K个字母的本身值一定最大，关键是插入的位置，有三种插法，插在头部、中间和尾部。</p>
+<ul>
+<li>插在头部，字符串值增加wk + sum{wi} (0&lt; i &lt;= |s|);</li>
+<li>插在尾部，值增加wk * (|s| + 1)，显然插在尾部要更好因为wk &gt;= wi;</li>
+<li>插在中间，值增加的为wk <em> (pos + 1) + sum{wi} ( pos &lt; i &lt;= |s|)，还是没有插在尾部号。<br>所以结论就是将<em>*最大的值插在字符串尾部</em></em>。</li>
+</ul>
+<h3 id="Problem-C-DZY-Loves-Sequences"><a href="#Problem-C-DZY-Loves-Sequences" class="headerlink" title="Problem C. DZY Loves Sequences"></a>Problem C. DZY Loves Sequences</h3><p>题目大意：给一个数字数组Q，问在最多更改一个数字的情况下，能得到的最长严格递增子数组的长度为多少，数组长度&lt; 10^5？</p>
+<p><strong>分析：</strong>如果是最多能更改一个数字的话，只要<strong>枚举被更改数字的位置</strong>就可以了，并且提前算好这个数字前的最长递增子序列LSQ和数字后的最长递增子序列RSQ， 最长子序列长度为max{LSQ + RSQ + 1（存在的情况下）， LSQ + 1， RSQ + 1}，时间复杂度为O(n)。当左边最后一个数Q(leftEnd)和右边第一个数Q(rightFirst)不满足：Q(rightFirst) - Q(leftEnd) &gt;= 2时，则无法拼接两边序列。</p>
+<h3 id="D-DZY-Loves-Modification"><a href="#D-DZY-Loves-Modification" class="headerlink" title="D. DZY Loves Modification"></a>D. DZY Loves Modification</h3><p>题目大意：给一个数字矩阵M，然后有2种操作分别可以取某行或某列，如果取了某行，则得到一个该行总和的happiness，但该行所有数字都要减少p；列也是如此。问如何进行K次行或列上的操作，使得最后得到的happiness最大。</p>
+<p><strong>分析：</strong>取某一行后每一列都受相同影响，取列对取行也是如此，所以具体取哪一行对取列没有影响，<strong>所以如果取行的话，一定取当前和最大的行。</strong>再次，如何决定当前操作是行操作还是列操作呢？这一点不好决定，但假设有最优序列OPS，并且里面有某个相邻的行列操作HV，那么交换操作序列为VH，H对V产生减P影响，V对H也是减P的影响，所以并不影响取出值，也就是说操作次序无所谓。那么可以把行操作都放在前面，后面接着进行列操作。<br>接着，先分别算出K次行操作的取值和K次列操作的取值，然后枚举最优情况下行列操作的次数。最优值为:</p>
+<p>max { HCost[i] + VCost[k - i] + k <em> (k - i) </em> p }  (0&lt;= i &lt;= k)</p>
+<p>这题我犯了一个错误，第一步对了，却是想当然的用贪心取每次值最大的行或列。</p>
+<p>代码：</p>
+<pre lang="cpp">#include 
+#include 
+#include 
+using namespace std;
+
+long long rowCost[1000005];
+long long colCost[1000005];
+int main()
+{
+    int n, m, k, p;
+    priority_queue, less &gt; rowSumQ;
+    priority_queue, less &gt; colSumQ;
+    cin &gt;&gt; n &gt;&gt; m &gt;&gt; k &gt;&gt; p;
+
+    long long rowSum[1005], colSum[1005];
+    for(int i = 0;i &lt; 1005;i++)
+        rowSum[i] = colSum[i] = 0;
+    for(int i = 0; i &lt; n;i++)
+        for(int j = 0;j &lt; m;j++)
+        {
+            int ijVal;
+            cin &gt;&gt; ijVal;
+            rowSum[i] += ijVal;
+            colSum[j] += ijVal;
+        }
+    for(int i = 0;i &lt; n;i++)
+        rowSumQ.push(rowSum[i]);
+    for(int i = 0;i &lt; m;i++)
+        colSumQ.push(colSum[i]);
+
+    rowCost[0] = 0;
+    for(int i = 1;i &lt;= k;i++)
+    {
+        long long rowMax = rowSumQ.top();
+        rowCost[i] = rowCost[i - 1] + rowMax;
+        rowSumQ.pop();
+        rowSumQ.push(rowMax - p * m);
+    }
+    colCost[0] = 0;
+    for(int i = 1;i &lt;= k;i++)
+    {
+        long long colMax = colSumQ.top();
+        colCost[i] = colCost[i - 1] + colMax;
+        colSumQ.pop();
+        colSumQ.push(colMax - p * n);
+    }
+
+    long long res = rowCost[k];
+    for(int i = 0;i &lt;= k;i++)
+    {
+        long long cost = rowCost[i] + colCost[k - i] - (long long)i * (k - i) * p;
+        res = res &lt; cost ? cost : res;
+    }
+
+    cout &lt;&lt; res &lt;&lt; endl;
+    return 0;
+}</pre>
+
+<h3 id="E-DZY-Loves-Fibonacci-Numbers"><a href="#E-DZY-Loves-Fibonacci-Numbers" class="headerlink" title="E. DZY Loves Fibonacci Numbers"></a>E. DZY Loves Fibonacci Numbers</h3><p>分析: 赤裸裸的线段树，不过树状数组过不了，体现了树状数组不够平衡，操作还是要自底而上，效率比线段树差。</p>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2014/07/15/Codeforce255 DIV2/" data-id="cixfwillr0023bs9kr11otngg" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Codeforce/">Codeforce</a></div><div class="post-nav"><a href="/2014/07/18/C语言程序设计一/" class="pre">C语言程序设计一</a><a href="/2014/07/13/最近三个月总结/" class="next">最近三个月总结</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+var disqus_identifier = '2014/07/15/Codeforce255 DIV2/';
+var disqus_title = 'Codeforce255 DIV2';
+var disqus_url = 'http://yoursite.com/2014/07/15/Codeforce255 DIV2/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//harveyai.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/03/21/写代码，养成好习惯/">写代码，养成好习惯。</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/18/一个面试题/">一个面试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/04/2015年总结/">2015年总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/赠人玫瑰，手有余香/">赠人玫瑰，手有余香</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/秋晨/">秋晨</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/26/Srm667 DIV2/">Srm667 DIV2</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/06/秋至/">秋至</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/03/网络模型之Epoll模型/">网络模型之Epoll模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/02/网络模型之多进程模型，Select模型/">网络模型之多进程模型，Select模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/08/26/两道几何题/">两道几何题</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/">DevTool</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/System/">System</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/">Engineer</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Language/">Language</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Operation/">Operation</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Entertainment/">Entertainment</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Language/">Language</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Language/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Life/">Life</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Life/Science/">Science</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/">Literature</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Math/">Math</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Music/">Music</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/">Operation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Poem/">Poem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Repost/">Repost</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Science/">Science</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Social-training/">Social training</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://github.com/Harvey-Ai" title="GitHub" target="_blank">GitHub</a><ul></ul><a href="http://weibo.com/ufo008ahw" title="weibo" target="_blank">weibo</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Harvey's Notes.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

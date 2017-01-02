@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="记一些东西"><title>Linux入门介绍 | Harvey's Notes</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Linux入门介绍</h1><a id="logo" href="/.">Harvey's Notes</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Linux入门介绍</h1><div class="post-meta">Sep 10, 2013<span> | </span><span class="category"><a href="/categories/System/">System</a></span></div><a data-disqus-identifier="2013/09/10/Linux入门介绍/" href="/2013/09/10/Linux入门介绍/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>如果在几十年前，说使用Linux的人是geek还算正常；但是现在Linux已经满大街都是，桌面系统已经做的很好用了，再说使用Linux用户是geek的话已经不太适合了。所以趁Windows还没有推出历史舞台，赶紧跟上潮流，下面给大家介绍一下Linux的入门知识。</p>
+<p><strong>1. 安装</strong></p>
+<p>常见的linux桌面发行版本有Fedora，Ubuntu，CentOS等等，安装的方式也有很多种，可以用光盘，硬盘甚至U盘的方式。使用光盘安装只要先把启动项改为光盘先启动即可，U盘安装只是要做一个U盘启动盘原理和光盘类似；硬盘安装稍微要困难一些，拿Fedora来说，他的发行版有liveOS和DVD两种，liveOS相当于试用版，如果你觉得好用可以安装，这两个版本都可以在网上下到，并且通过硬盘安装到电脑上，首先linux是通过grub引导的，所以要通过配置grub的menulist，第二要将fedora中的内核文件(vmlinuz, initrd)放到配置的盘的根目录。另外vmlinuz不支持ntfs，所以不能设置格式是ntfs的启动盘。</p>
+<p>安装过程和windows也差不多，跟着提示一步一步往下设置就好，比较重要的大概有设置root密码和划分分区。在划分分区中需要设置一下swap分区的大小，如果硬盘足够大，可以稍微设置大一些。</p>
+<p><strong>2. 基本操作</strong></p>
+<p>linux同时提供两种用户界面，CLI和GUI（统称shell，用于将用户命令翻译给kernel）。GUI对于普通用户比较熟悉，不过在linux中，图形界面只是作为一个被安装的应用程序，所以不同与windows，用户可以选择安装图形界面，如果不安装就没有图形界面。常见的图形界面有KDE和GNOME，这两种界面都是遵循GPL协议的开源软件，不过由于KDE是用Qt实现的，虽然后来Qt也遵循了GPL协议，但是Qt执行的是双重协议，一些大型的商业厂商对这个问题比较担心，阻碍了KDE的发展；GNOME是曾经在KDE中的一群开源狂热分子，因为不满KDE是基于非开源软件的事实而另起炉灶搞出来的桌面环境，GNOME是基于GPL的开源软件，基于的图形框架是GTK，界面的模式模仿Mac OS，由于得到了不少大厂商如Redhat、IBM的支持，发展非常快。</p>
+<p>图形界面一般用户都很熟悉，Linux下的桌面环境也可以进行配置使得环境看起来更友好，进行的操作就是双击，单击这样的操作。linux下主要的使用方式是通过console对系统下达命令，在Linux通过终端进行操作非常方便，很多时候在图形界面下很繁琐的工作一两句命令就能搞定，同时能让你对系统更加的了解，总之命令行的学习过程是一个比较陡峭的学习曲线，但是一旦你适应了，你的工作效率会成倍增长，并且能极大的扩展计算机的技能。</p>
+<p>Linux是一款类Uniux操作系统，他非常优秀以至于你能用他做几乎任何事情，同时也继承了Uniux一些非常好的特性。在Linux中，没有非常复杂的命令，几乎每一条命令都非常简单，遵循的原则是简单而有用。</p>
+<p>常用的命令有以下一些，用好这些，基本就可以使用Linux了。</p>
+<ul>
+<li>man：“manual”简写，命令帮助文档，1：用户命令，2：内核调用，3：库文件调用，man -k 支持关键查询。</li>
+<li>ls: “list”简写，列出当前文件夹下内容，默认情况下，不同的颜色代表不同的文件类型，白色代表普通文件，红色代表压缩文件，蓝色代表文件夹，淡蓝色代表链接文件，绿色代表可执行文件，黄色代表设备文件，红色闪烁代表有问题文件，文件背景颜色一般跟权限有关。</li>
+<li>cd：“change directory”的简写，改变文件夹。</li>
+<li>sudo， su：”switch user“的简写。</li>
+<li>mv：“move”简写，移动文件，重命名文件。</li>
+<li>cp：“copy”简写，拷贝文件。</li>
+<li>link：创建链接文件。</li>
+<li>rm：“remove”简写，删除文件。</li>
+<li><p>还有一些mkdir，rmdir，touch，tar，gzip，zip等等<br>除了知道命令，对系统和一些约定俗称的规则的熟悉程度也影响使用者的工作效率，linux下的每个文件当然都是通过挂载的形式出现的，挂载之后的硬件就交给文件系统来管理，而Linux通过文件系统来管理整个硬件，包括设备。以下是系统中一些文件夹的功能。</p>
+</li>
+<li><p>/bin：保存可执行文件，上面说的ls，rm等命令多数都存在这里。</p>
+</li>
+<li>/dev：保存设备文件，如果硬盘是串口，那么会有sda，s表示串口，a表示第一个盘，当然如果有多个分区可能出现sda1等，如果硬盘是并口就会出现hda等等，总之所有设备都在这里。</li>
+<li>/home：家目录，用户除了使用系统外，其他的数据都放在这里。</li>
+<li>/lib：库文件目录，存放程序的链接库，多数是.so文件。</li>
+<li>/meida, /mnt：默认加载目录。</li>
+<li>/etc：配置文件目录，一般软件需要配置都会把配置文件放在这里。</li>
+<li>/opt：存放一些大型软件的地方，如oracle。</li>
+<li>/boot：存放跟启动相关的文件，内核文件vmlinuz和initramfs就存放在这里，同时还有必要的模块，这是一个鸡生蛋、蛋生鸡的问题，initramfs是在加载之前搞了一个内存文件系统。同时grub就在这里，可以配置grub.conf来修改启动。</li>
+<li>/tmp：存放临时文件。</li>
+<li>/var：存放经常变动的文件，一般来说数据库，日志都是经常写入的文件，所以会放在这里。</li>
+<li>/selinux：安全版的linux，增强了权限管理。</li>
+<li>/proc：这是一个虚拟内存的文件，存放进程的实时信息，里面的每一个文件夹都是一个进程的相关信息。</li>
+<li>/usr：保存用户软件信息。</li>
+<li><p>/lost+found：当文件系统出错时，错误的数据会被存放到这里，这个文件夹常为空文件夹。<br>关于Linux的命令，还有一些Tips。</p>
+</li>
+<li><p>Tap可以补全命令</p>
+</li>
+<li>～表示家目录</li>
+<li>–表示长命令行，跟单词；-表示短命令行，跟字母</li>
+<li>console是大小写敏感的。</li>
+<li>history可以打印历史命令信息，如果是骇客，消除使用记录是必须的。<br><strong>3. 系统管理</strong></li>
+</ul>
+<p>了解了一些基本命令和系统的模样后，已经可以对Linux进行一个初步的使用了。接下来，如果你是一个系统管理者，需要接手整个系统，那么你至少要了解一些操作系统的知识。</p>
+<ul>
+<li>查看系统信息：在/proc下，基本的硬件信息都有，如cpuinfo保存了cpu的信息。同时还有一些工具可以直接查看硬件信息，lspci：查看pci接口，lsusb：查看usb接口，lsmod：查看加载模块，uname：查看Linux操作系统信息，dmesg：查看系统启动log，在/var/log下。</li>
+<li>管理文件系统：现在启动操作系统的方式有两种，一种是MBR，MBR占用磁盘空间的前512个字节，这种方式最多只能支持2TB的数据，最多支持4个主分区，不过这种方式用的最多，另一种市GPT方式，扩展了MBR的空间，可以支持非常大的空间。Linux常用的文件系统有ext3，ext4等，不支持ntfs。常用的管理磁盘的方法有，df查看分区情况，fdisk：基于MBR启动的磁盘管理器， mount：管理磁盘加载到文件， fsck：检查并修复文件系统，mkfs：创建文件系统，俗称格式化（文件系统是软件）。</li>
+<li>管理进程：Linux下管理进程也非常简单。ps：查看进程，top：动态查看进程，kill：终止进程。如果要后台运行任务在运行时在应用程序后+&amp;即可，通过jobs查看，通过fg、bg转换前后台，kill + %任务号可以终止任务。同时control + C可以终止正在运行的程序，control + Z 可以让程序运行到后台。一般情况下，Linux有6种运行模式，常用的是模式5（带图形界面的多用户模式），可以修改/etc/inittab改变启动模式，每一个模式的对应启动服务放在ect/rc.x下，当然也可以用init + “模式号”来改变运行模式，例如：“init 0”就是关机。关机的命令有：shutdown， poweroff， halt，重启命令有：reboot。</li>
+<li>配置网络：一般情况下客户端的网络配置需要的步骤很少，只需要配置ip地址，DNS，hostname等就可以了，setup命令可以编辑网络配置。具体的网络配置信息在/etc/sysconfig/network-script下，DNS在/etc/resolv.conf中，通过ifconfig可以查看网卡信息，并可以通过添加参数up和down来启用和关闭网卡。</li>
+<li>用户管理：普通的Linux权限控制是通过UGO的方式进行控制的，U表示文件所属用户，G表示用户所属组，O表示其他用户，可以对三组用户设置“读”、“写”和”执行“的权限。Linux通过一些简单的命令来对用户进行管理，创建用户：useradd，删除用户：userdel，改变用户信息：usermod，可以通过命令配置创建的用户的id、home目录、组等一些信息，同样3个有对应的组命令。对于文件上的权限操作命令有：chown：更改文件所有者，chmod：更改文件属性等。<br><strong>4. 文本编辑</strong></li>
+</ul>
+<p>在Linux进行的操作，大部分都跟纯文本有关，包括修改配置文件，查看文档，等等。Linux下最著名的文本编辑器当属Vim，学习Vim同样是一个陡峭的学习曲线，Vim的模式有3种，插入模式，命令模式和可视模式，Vim有一点比较难用的地方，Vim有自己的复制缓冲区，所以想要把Vim中的数据复制出来并粘贴到其他地方的话，要把要复制的内容复制到系统缓冲区中，使用”+y命令，“+为对应的系统缓冲区（可以输入reg查看）。</p>
+<p>通过命令行查看文本的命令还有：cat, head, tail, more, less其中less支持上下翻页。</p>
+<p>除了查看文本，Linux提供一些文本搜索和统计功能，find可以查找某个文件，locate同样用于查找（只根据database里进行更新，所以要updatedb），grep可以在文件中找到某些匹配的字符，wc用于统计文本的行数，词数等信息。</p>
+<p><strong>5. 安装软件</strong></p>
+<p>在Linux下安装软件是一件比较繁琐的事情，不仅是安装的方式和开源界本身的问题，往往有些依赖关系让人非常难解决。安装软件的方法有两种，一种是源码安装，通过./configure, make, make install编译链进行安装，这种安装方法具有很大的自由度，需要用户自己对某些性质进行配置，不是特殊情况下不推荐这样安装软件；第二种方法是通过二进制包进行安装，通常的包有rpm包（redhat package manager)。安装方法为：rpm -ivh，卸载：rpm -e，查看rpm -q，q后面可以跟一些查询a是所有安装文件、i软件信息，l软件内容，f查看某个文件对应的rpm。</p>
+<p>为了更好的使用rpm功能，yum对rpm进行的封装，省去了软件包依赖关系的处理，YUM是通过软件仓库的方式来解决依赖关系的问题，仓库一般是网络提供，当然也可以把仓库建在本地。配置文件在/etc/yum.repo.d/中的repo文件。使用yum管理软件非常容易，安装：yum install，删除：yum remove， 更新：yum update，yum list用于搜索软件包名，yum info查看软件信息，yum search用于搜索整个软件包名及说明，yum clean repodata用于删除缓存信息。</p>
+<p>以上差不多就是linux入门的东西了，linux入门不是一件简单的事情，学习的曲线特别陡峭，一开始可能有各种各样的问题，但是只要开始行动，一定会有收获，一旦入门会有一种找到了钥匙，打开了一扇封存许久的大门，门的那一边是一片广阔的天空。</p>
+<p>下面再给新手一些<strong>建议</strong>：1. 凡事不懂问man，再不行google，要知道你遇到的问题几乎都有人遇到果，第一次遇到这个问题是你的概率非常小。2. 选择一个比较稳定的版本，如CentOS、Ubuntu稳定版，fedora发行太快，各种潜在问题，常常因一个小问题而影响了整个系统，往往又很难修复，打击积极性。</p>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2013/09/10/Linux入门介绍/" data-id="cixfwilnc0048bs9kivkja4um" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Linux/">Linux</a></div><div class="post-nav"><a href="/2013/09/28/做事哲学/" class="pre">做事哲学</a><a href="/2013/09/09/老男孩，行动起来/" class="next">老男孩，行动起来</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+var disqus_identifier = '2013/09/10/Linux入门介绍/';
+var disqus_title = 'Linux入门介绍';
+var disqus_url = 'http://yoursite.com/2013/09/10/Linux入门介绍/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//harveyai.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/03/21/写代码，养成好习惯/">写代码，养成好习惯。</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/18/一个面试题/">一个面试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/04/2015年总结/">2015年总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/赠人玫瑰，手有余香/">赠人玫瑰，手有余香</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/秋晨/">秋晨</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/26/Srm667 DIV2/">Srm667 DIV2</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/06/秋至/">秋至</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/03/网络模型之Epoll模型/">网络模型之Epoll模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/02/网络模型之多进程模型，Select模型/">网络模型之多进程模型，Select模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/08/26/两道几何题/">两道几何题</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/">DevTool</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/System/">System</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/">Engineer</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Language/">Language</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Operation/">Operation</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Entertainment/">Entertainment</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Language/">Language</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Language/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Life/">Life</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Life/Science/">Science</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/">Literature</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Math/">Math</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Music/">Music</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/">Operation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Poem/">Poem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Repost/">Repost</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Science/">Science</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Social-training/">Social training</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://github.com/Harvey-Ai" title="GitHub" target="_blank">GitHub</a><ul></ul><a href="http://weibo.com/ufo008ahw" title="weibo" target="_blank">weibo</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Harvey's Notes.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

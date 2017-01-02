@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="记一些东西"><title>Srm667 DIV2 | Harvey's Notes</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.0/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Srm667 DIV2</h1><a id="logo" href="/.">Harvey's Notes</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">Srm667 DIV2</h1><div class="post-meta">Sep 26, 2015<span> | </span><span class="category"><a href="/categories/Algorithm/">Algorithm</a></span></div><a data-disqus-identifier="2015/09/26/Srm667 DIV2/" href="/2015/09/26/Srm667 DIV2/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>这是掉到DIV2后的第二次比赛，本以为题目简单，但没想到又掉坑里。。。</p>
+<p><span class="Apple-style-span"><strong>第一题</strong></span>，在一个100 * 100的二维平面内找一个满足一个条件的点，无任何亮点，枚举即可。</p>
+<p><span class="Apple-style-span"><strong>第二题</strong></span>，初始情况下有一个空Cache，假设系统共有N个元素，用位表示法来表示，0表示第i个元素不存在，1表示存在，所以初始Cache就是是000… 000。</p>
+<p>接下来有M个操作，每次操作都会读取一些元素（例如，011表示用到了第2，3元素），如果数据在Cache中则消耗时间为0，如果不在Cache中，系统要将元素Cache进来，消耗的时间是[需取元素个数] ^ 2。问如何排列这M个操作消耗总时间最少，输出最少时间。N, M &lt;= 20。</p>
+<p><span class="Apple-style-span"><em>分析</em></span>：如果消耗时间是不是平方关系，只是线性关系，那么最后消耗时间就是最后Cache包含的元素个数，无所谓操作的序列了。但是，有平方关系就不一样了，由于每一次需要取的新元素个数是不一样的，平方之后会对最后结果产生影响,比如：有3个操作，分别要取1000, 1100, 0111，可以走1000 -&gt; 1100 -&gt;0111，结果就是1 ^ 2 + 1 ^ 2 + 2 ^ 2 = 6；也可以走0111-&gt; 1000 -&gt; 1100，结果就是3 ^ 2 + 1 ^ 2 = 10。</p>
+<p>显然不同操作顺序会影响最后的总消耗时间，题目的意思实际上就是拆成M项数字，让这M项的平方和最小。</p>
+<p>通过以上分析，有些读者可能会像到贪心的算法，就是每次尽量的少取新元素，这样分解的结果会是每一项都非常小，诈看是有道理的，但是犯了和笔者一样的问题，由于这里的操作并不能形成一个链，有许多分叉，操作之间有交叉关系，贪心眼前最优值并不能导致全局最优，比如序列:0011，1100，1110，11111。如果按贪心的来就是0011-&gt;1100-&gt;1110-&gt;1111，这样的结果是8，但是正确6。</p>
+<p>既然贪心不对，那么怎么做呢，观察到N &lt;= 20，可以暴力枚举每一种Cache状态的最少消耗时间，一共有2 ^ 20种Cache状态，DP[state] = DP[last_state] + newEle ^ 2。 last_state可以枚举当前的操作，所以时间复杂度是O(20 * 2 ^ 20)。</p>
+<p><pre class="cpp">class OrderOfOperationsDiv2 {<br>    public:</pre></p>
+<pre><code>int getOneNum(int num) {
+    int res = 0;
+    while(num) {
+        num &amp;amp;= (num - 1);
+        res++;
+    }
+
+    return res;
+}
+
+int getVal(string s) {
+    int res = 0;
+    for(int i = s.size() - 1;i &amp;gt;= 0;i--) {
+        res &amp;lt;&amp;lt;= 1;
+        if (s[i] == &apos;1&apos;)
+            res++;
+    }
+
+    return res;
+}
+
+int minTime(vector &amp;lt;string&amp;gt; s) {
+    int dp[1 &amp;lt;&amp;lt; 20];
+    memset(dp, -1, sizeof(dp));
+    dp[0] = 0;
+
+    int res = 0;
+    for(int i = 0;i &amp;lt; 1 &amp;lt;&amp;lt; 20;i++) {
+        if (dp[i] == -1)
+            continue;
+
+        for(int j = 0;j &amp;lt; s.size();j++) {
+            int sInt = getVal(s[j]);
+            int nextInt = sInt | i;
+            int oneNum = getOneNum(nextInt ^ i);
+
+            if (dp[nextInt] == -1)
+                dp[nextInt] = dp[i] + oneNum * oneNum;
+
+            // cout &amp;lt;&amp;lt; nextInt &amp;lt;&amp;lt; &quot; &quot; &amp;lt;&amp;lt; dp[nextInt] &amp;lt;&amp;lt; endl;
+            dp[nextInt] = min(dp[nextInt], dp[i] + oneNum * oneNum);
+            res = dp[nextInt];
+        }
+    }
+
+    return res;
+}
+</code></pre><p>};<br><strong>第三题</strong>，题目背景是一个如何最优地建造商店问题，N个地基排成一行，每个地基可以盖多层（意味着可以有多个商店），但是这个地基上的商店收益与左右地基中商店个数有关profit[x][y],x是该位置上的商店数，y是左右位置上的商店总数，最多可以建造M个商店。问如何建造商店能得到最大收益。M， N &lt;= 31。</p>
+<p><em>分析</em>：想一下最原始的顺序DP是怎么样的，从左向右顺序递推，dp[i][t] = dp[i - 1][s] + profit，但是这里除了左边，还要考虑右边。如果考虑其他方案可能比较都比较麻烦，这里有一种特别好的方法，就是拓展状态。既然右边需要考虑，那么就右边的建造数加到状态中，这样就能唯一状态了。所以，状态改成dp[i][t][r]，表示第i位上建造t个商店，并且右边有r个商店，前i个位置取得的最好的利益值。所以递推方程就是:</p>
+<p>dp[i][t][r] = dp[i – 1][l][t] + profit[l][r] { 0 =&lt; t &lt;= m, 0 =&lt; l &lt;= m }</p>
+<p>最终结果是max(dp[N – 1][t][0]), 时间复杂度是O(N * m ^ 3)。</p>
+<p><pre class="cpp">class ShopPositions {<br>    public:<br>    int maxProfit(int n, int m, vector &lt;int&gt; c) {<br>        int dp[31][31][31];<br>        memset(dp, 0, sizeof(dp));</pre></p>
+<pre><code>    for(int i = 0;i &amp;lt; n;i++) {
+        // 0 taco
+        if (i &amp;gt; 0) {
+            int maxVal = 0;
+            for(int j = 0;j &amp;lt;= m;j++) {
+                maxVal = max(maxVal, dp[i - 1][j][0]);
+            }
+            for(int j = 0;j &amp;lt;= m;j++) {
+                dp[i][0][j] = maxVal;
+            }
+        }
+
+        for(int j = 1;j &amp;lt;= m;j++) {
+            for(int l = 0;l &amp;lt;= m;l++) {
+                for(int r = 0;r &amp;lt;= m;r++) {
+                    if (i == 0)
+                        dp[i][j][r] = c[i * 3 * m + j + r- 1] * j;
+                    else
+                        dp[i][j][r] = max(dp[i][j][r], dp[i - 1][l][j] + c[i * 3 * m + j + l + r - 1] * j);
+                }
+            }
+        }
+    }
+
+    int res = 0;
+    for(int i = 0;i &amp;lt;= m;i++) {
+        res = max(res, dp[n - 1][i][0]);
+    }
+
+    return res;
+}
+</code></pre><p>};<br>作为一个程序设计者，最重要的就是分析能力，不管是算法，还是其他领域，对任何问题都要有剖开问题，重新组织的能力。这次比赛的后两道题都比较不错，第二题很容易想成贪心，而第三题又能训练对动态规划的状态的理解。</p>
+<p>有一些教训，就是当不确定算法是否正确的时候，可以通过“<strong>测试驱动</strong>”的方式来进行编程，多想测试用例能够去除掉具有显著错误的算法，这一点尤其在短时间内是有用的。</p>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yoursite.com/2015/09/26/Srm667 DIV2/" data-id="cixfwilo8005hbs9kqgv0az0g" class="article-share-link">分享到</a><div class="tags"><a href="/tags/SRM/">SRM</a><a href="/tags/DP/">DP</a><a href="/tags/测试驱动/">测试驱动</a><a href="/tags/贪心/">贪心</a></div><div class="post-nav"><a href="/2015/11/18/秋晨/" class="pre">秋晨</a><a href="/2015/09/06/秋至/" class="next">秋至</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+var disqus_identifier = '2015/09/26/Srm667 DIV2/';
+var disqus_title = 'Srm667 DIV2';
+var disqus_url = 'http://yoursite.com/2015/09/26/Srm667 DIV2/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//harveyai.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2016/03/21/写代码，养成好习惯/">写代码，养成好习惯。</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/18/一个面试题/">一个面试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/04/2015年总结/">2015年总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/赠人玫瑰，手有余香/">赠人玫瑰，手有余香</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/秋晨/">秋晨</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/26/Srm667 DIV2/">Srm667 DIV2</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/06/秋至/">秋至</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/03/网络模型之Epoll模型/">网络模型之Epoll模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/02/网络模型之多进程模型，Select模型/">网络模型之多进程模型，Select模型</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/08/26/两道几何题/">两道几何题</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/">DevTool</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/System/">System</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/">Engineer</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Language/">Language</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Operation/">Operation</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Entertainment/">Entertainment</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Language/">Language</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Language/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Life/">Life</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Life/Science/">Science</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/">Literature</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Math/">Math</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Music/">Music</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/">Operation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Poem/">Poem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Repost/">Repost</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Science/">Science</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Social-training/">Social training</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="https://github.com/Harvey-Ai" title="GitHub" target="_blank">GitHub</a><ul></ul><a href="http://weibo.com/ufo008ahw" title="weibo" target="_blank">weibo</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Harvey's Notes.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
