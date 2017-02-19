@@ -72,7 +72,7 @@ cout &amp;lt;&amp;lt; res &amp;lt;&amp;lt; endl;
 return 0;
 </code></pre><p>}<br><br>提交到OJ上，怎么搞都不对，最后都有点怀疑数据了，思路确认了没有问题，原因出在哪里呢？仔细审查代码之后发现一个重大问题，最后for(long long i = 0; i &lt; (k - opNum);i++) ，这一行中K可能很大，所以i可能超过200，存在数组越界的情况，改成for(long long i = 0;i &lt; (k - opNum) &amp;&amp; i &lt; 200;i++)，再提交，正确。</p>
 <p>这种bug很隐蔽，要非常小心数据的范围，程序不止是逻辑上正确，最终还是反映到对数据的处理上，如果不小心可能一盘好局全盘皆输。</p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2016/02/18/一个面试题/" data-id="cizcrvtv5006kl19kh34in5fk" class="article-share-link">分享到</a><div class="tags"></div><div class="post-nav"><a href="/2016/03/21/写代码，养成好习惯/" class="pre">写代码，养成好习惯。</a><a href="/2016/01/04/2015年总结/" class="next">2015年总结</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2016/02/18/一个面试题/" data-id="cizcs2n86006nmk9khy52zt9d" class="article-share-link">分享到</a><div class="tags"></div><div class="post-nav"><a href="/2016/03/21/写代码，养成好习惯/" class="pre">写代码，养成好习惯。</a><a href="/2016/01/04/2015年总结/" class="next">2015年总结</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
 var disqus_identifier = '2016/02/18/一个面试题/';
 var disqus_title = '一个面试题';
 var disqus_url = 'http://harvey-ai.github.io/2016/02/18/一个面试题/';

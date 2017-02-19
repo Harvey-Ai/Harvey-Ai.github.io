@@ -2,7 +2,7 @@
 <p>问题描述：假设你的起点在坐标轴0点，第一次你可以选择向左或向右移动一个位置，第二次选择向左或向右移动两个个位置，以此类推，问至少要移动多少次可以移动到一个指定的位置(x)。10^(-9)&lt;x&lt;10^(9)</p>
 <p>首先分析问题：<br>先拿到这个问题，可能会想到广搜，但是广搜就是漫无目的的搜，连开多大的数组都这知道，所搜的代价很高。所以需要再分析一下问题。<br>来看一下第n步所能到达的最远位置，即全向一个方向都：1+2+3+。。n = sum(n)，次长位置呢？将1变成-1，为sum(n) - 2。然后是sum(n) - 4。所以可到达的位置为：sum(n), sum(n)-2, sum(n) -4 … 1或0。负方向与正方向等价。所以n步内可及的位置是[-sum(n ), sum(n)]内与sum(n)同奇偶的坐标。</p>
 <p>所以接下来就简单了，只要求出最小的n使得：((n+1) <em> n / 2) % 2 = x %2 &amp;&amp; ((n+1) </em> n / 2) &gt;= |x|。这样直接把问题转化为数学问题（直接求sqrt(x))，减小了复杂度，并且实现简单。</p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2010/04/30/CodeForce 11B/" data-id="cizcrvtrd001kl19k2s2k7gkl" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Codeforce/">Codeforce</a></div><div class="post-nav"><a href="/2010/05/13/dev-c++中添加gmp库/" class="pre">dev-c++中添加gmp库</a><a href="/2010/04/26/十个利用矩阵乘法解决的经典题目/" class="next">十个利用矩阵乘法解决的经典题目</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2010/04/30/CodeForce 11B/" data-id="cizcs2n4h001mmk9kd1ygx2b4" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Codeforce/">Codeforce</a></div><div class="post-nav"><a href="/2010/05/13/dev-c++中添加gmp库/" class="pre">dev-c++中添加gmp库</a><a href="/2010/04/26/十个利用矩阵乘法解决的经典题目/" class="next">十个利用矩阵乘法解决的经典题目</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
 var disqus_identifier = '2010/04/30/CodeForce 11B/';
 var disqus_title = 'CodeForce 11B';
 var disqus_url = 'http://harvey-ai.github.io/2010/04/30/CodeForce 11B/';
