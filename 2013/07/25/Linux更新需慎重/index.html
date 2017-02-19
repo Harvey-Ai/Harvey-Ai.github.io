@@ -7,7 +7,7 @@
 <p>安装好之后，系统的菜单栏会出现“花屏”的现象，决定进行一下更新（yum update），更新之后出现，问题来了，“kde4 crash“直接导致network manager无法使用，用root执行kde会报“cannot find d-bus session server”，上网查了一下dbus的东西，dbus也是通讯模块，比socket早一些，大概过程是发送端和接受端同时和dbus进程进行通讯，dbus进程进行中间调度，系统具有两类dbus进程：session级和system，于是笔者用dbus-launch –session开启session dbus可是故障照旧，最终无奈选择了重新安装</p>
 <p>后面安装DVD版本险些把系统搞废了，在安装的最后一步，系统分区表已写入的情况下，fedora告诉我无法创建系统（尼玛，这不是大坑吗！！！！），重启之后的系统只剩下Grub入口，幸好之前在分区的时候保留了一个之前的fat32盘，重新用live-CD启动了系统，在这期间使用了fdisk分区，mkfs格式化分区，linux的console方式比windows确实方便不少。</p>
 <p>Linux的生态系统是开源的，使用的东西并没有保证，所以在不知道后果的情况下，最好不要随意更新系统。</p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2013/07/25/Linux更新需慎重/" data-id="cizcs7ck1004cnq9kgepw27m8" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Fedora更新/">Fedora更新</a></div><div class="post-nav"><a href="/2013/08/15/个人计划/" class="pre">个人计划</a><a href="/2013/06/24/整天想着宏伟的目标，不采取行动，讲的就是我这种我人吧/" class="next">整天想着宏伟的目标，不采取行动，讲的就是我这种我人吧</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2013/07/25/Linux更新需慎重/" data-id="cizcs9n4j004eol9ka04mvxfb" class="article-share-link">分享到</a><div class="tags"><a href="/tags/Fedora更新/">Fedora更新</a></div><div class="post-nav"><a href="/2013/08/15/个人计划/" class="pre">个人计划</a><a href="/2013/06/24/整天想着宏伟的目标，不采取行动，讲的就是我这种我人吧/" class="next">整天想着宏伟的目标，不采取行动，讲的就是我这种我人吧</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
 var disqus_identifier = '2013/07/25/Linux更新需慎重/';
 var disqus_title = 'Linux更新需慎重';
 var disqus_url = 'http://harvey-ai.github.io/2013/07/25/Linux更新需慎重/';

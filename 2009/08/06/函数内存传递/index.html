@@ -15,7 +15,7 @@ void Test(void)
 <p>如果你写了这个程序，那么一定会崩溃。曾经一度以为是malloc申请的空间生存期只是在函数内，被收回了，其实是被某书被忽悠了！!</p>
 <p>malloc申请的是堆空间，C语言中堆空间是必须要手动释放才能被释放的，所以malloc的100大小的空间没有释放。但是为什么不对呢？其实是C语言在参数传递时，会复制一个参数变量，如果传值变量p，那么函数会复制一个_p,这也就解释了C是值传递的原因了。本程序中是值传，所以p并未改变。</p>
 <p>内存传递可以用双指针，或者是引用。</p>
-</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2009/08/06/函数内存传递/" data-id="cizcs7cn5009cnq9kk1694yfy" class="article-share-link">分享到</a><div class="tags"><a href="/tags/内存/">内存</a></div><div class="post-nav"><a href="/2009/10/18/感谢开锁大叔/" class="pre">感谢开锁大叔</a><a href="/2009/07/29/五种开源协议的比较(BSD, Apache, GPL, LGPL, MIT)/" class="next">五种开源协议的比较(BSD, Apache, GPL, LGPL, MIT)</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://harvey-ai.github.io/2009/08/06/函数内存传递/" data-id="cizcs9na4009col9k60g19s3y" class="article-share-link">分享到</a><div class="tags"><a href="/tags/内存/">内存</a></div><div class="post-nav"><a href="/2009/10/18/感谢开锁大叔/" class="pre">感谢开锁大叔</a><a href="/2009/07/29/五种开源协议的比较(BSD, Apache, GPL, LGPL, MIT)/" class="next">五种开源协议的比较(BSD, Apache, GPL, LGPL, MIT)</a></div><div id="disqus_thread"><script>var disqus_shortname = 'harveyai';
 var disqus_identifier = '2009/08/06/函数内存传递/';
 var disqus_title = '函数内存传递';
 var disqus_url = 'http://harvey-ai.github.io/2009/08/06/函数内存传递/';
