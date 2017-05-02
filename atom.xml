@@ -5,10 +5,39 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://harvey-ai.github.io/"/>
-  <updated>2017-02-19T14:43:24.000Z</updated>
+  <updated>2017-05-02T18:00:25.000Z</updated>
   <id>http://harvey-ai.github.io/</id>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>听李航博士北大演讲有感</title>
+    <link href="http://harvey-ai.github.io/2017/04/11/%E5%90%AC%E6%9D%8E%E8%88%AA%E5%8D%9A%E5%A3%AB%E5%8C%97%E5%A4%A7%E6%BC%94%E8%AE%B2%E6%9C%89%E6%84%9F/"/>
+    <id>http://harvey-ai.github.io/2017/04/11/听李航博士北大演讲有感/</id>
+    <published>2017-04-11T15:41:00.000Z</published>
+    <updated>2017-05-02T18:00:25.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>晚上在公司听了李航博士的人工智能讲座，李航博士主要从事NLP方面的工作，讲了智能问答，语言翻译，图片索引，知识理解等方面的内容，主要是概述性的东西，讲了其中的难点，复杂度以及近年来突飞猛进的深度学习技术。深度学习至少在NLP方面，对效果的提升有显著的效果。</p>
+<p>讲的很精彩，（在学校讲的东西就是干货多），不过后面的提问环节更让我感兴趣。其实挺想问人工智能可能对人类社会的冲击，以及如何建立好这方面的伦理制度，（无奈一直打不上字，也没有问上）。后面雷鸣老师和李航老师做了更高的展望，虽然现在的人工智能还是比较初级，但是终极目标却是能理解人类，最后的最后计算机可能会产生意识和自我意识。</p>
+<p>（产生意识很好理解，广泛地来讲就是应激性，对外界事情的反应，就算是现在计算机也是有应激性的。但是如果哪一天计算机有了自我意识，那就真的相当可怕了，因为在人类的发育过程中，认识到自我的存在是一个比较长的时间，一个对“我”的存在的建立，并且逐步确立价值观，这是一个需要时间积累和反思的过程。）</p>
+<p>听完了讲座，我自己进行了更深入的思考，和个人判断。</p>
+<p><strong>那么真的有一天计算机真的会有意识和自我意识的建立的那一天吗？</strong><br>我的答案是：是，原因很简单，所有的物质条件都具备，计算机能模拟人的神经电信号，能对神经元进行模拟，那么就一定能产生一个和人脑一样能力的机器，毕竟人脑也是建立在单个神经元之上的产物。</p>
+<p><strong>未来的机器会和人一样的思维吗？是新物种还是人类的虚拟化物种？</strong><br>李航老师在讲人工智能的时候，讲到还有很多其他能力，如语音识别、图像识别等等。我到不觉得是这样的，真正的人工智能只有自然语言处理，这一点是马克思在讲内容与形式的那里就讲到了，人类的语言是思维的形式，是思维的载体，也就是作思维本身就存在于语言之中，智能蕴含于语言中，其他的那些都是建立在机器学习的感知器，终端工具而已。</p>
+<p>大胆的想象一下计算机将来到底是什么样子，按照人类目前的做法，计算机势必是在学习人类的语言，如果学习的是人类的语言，那么物种也必然是与人类相似；当然如果计算机在演化中得到了其他更适合的智能载体，那么能算一种新的物种了吧。</p>
+<p>扯的有点远，各位看官，随便看看罢了，不入耳的话，一笑了之。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;晚上在公司听了李航博士的人工智能讲座，李航博士主要从事NLP方面的工作，讲了智能问答，语言翻译，图片索引，知识理解等方面的内容，主要是概述性的东西，讲了其中的难点，复杂度以及近年来突飞猛进的深度学习技术。深度学习至少在NLP方面，对效果的提升有显著的效果。&lt;/p&gt;
+&lt;p&gt;讲
+    
+    </summary>
+    
+    
+      <category term="人工智能" scheme="http://harvey-ai.github.io/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/"/>
+    
+  </entry>
   
   <entry>
     <title>记一次梦</title>
@@ -894,39 +923,6 @@ N，K都是long long。
       <category term="多边形" scheme="http://harvey-ai.github.io/tags/%E5%A4%9A%E8%BE%B9%E5%BD%A2/"/>
     
       <category term="循环不变式" scheme="http://harvey-ai.github.io/tags/%E5%BE%AA%E7%8E%AF%E4%B8%8D%E5%8F%98%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Ubuntu下解决Chrome卡死问题</title>
-    <link href="http://harvey-ai.github.io/2015/03/16/Ubuntu%E4%B8%8B%E8%A7%A3%E5%86%B3Chrome%E5%8D%A1%E6%AD%BB%E9%97%AE%E9%A2%98/"/>
-    <id>http://harvey-ai.github.io/2015/03/16/Ubuntu下解决Chrome卡死问题/</id>
-    <published>2015-03-16T05:54:47.000Z</published>
-    <updated>2017-01-02T07:48:41.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>去年因为VirtualBox与Fedora版本总是不兼容，一怒之下删除了使用了多年的Fedora，安装上Ubuntu14.04 TLS。Ubuntu用起来非常舒服，比Fedora流畅很多。</p>
-<p>不过，用过一阵子之后发现当Chrome打开多个网页的时候，偶尔会出现系统疯狂读写硬盘，卡死的情况。上网找了一下，有人说是Chrome的自带Flash造成的原因，然后就没太在意，毕竟发生的频率不高。最近，在做Android开发，要开模拟器，机器动不动就卡死，上网找了一圈，有人说是Swap的问题。</p>
-<p><a href="http://115.28.13.176/blog/wp-content/uploads/2015/03/Screenshot-from-2015-03-15-165840.png" target="_blank" rel="external"><img src="http://115.28.13.176/blog/wp-content/uploads/2015/03/Screenshot-from-2015-03-15-165840.png" alt="free"></a></p>
-<p>Top一下，发现机器的Swap是0，Ubuntu的默认安装没有添加Swap空间，也是醉了，怪不得出现疯狂读写硬盘的情况，问题应该就在这里。然后按以下步骤添加Swap空间。</p>
-<p><pre>#cd /<br>1） 添加Swap分区， 4G</pre></p>
-<p>#dd if=/dev/zero of=swap bs=1M count=4096<br>2） 格式化</p>
-<p>#mkswap swap<br>3） 打开Swap空间</p>
-<p>#swapon swap<br>4） 编辑/etc/fstab，添加下面的一行，增加分区启动项。(这里不能用UUID，因为并不是一个分区)<br>/swap   /swap   swap    sw 0    0<br><br>添加之后无需重启，运行流畅，再没出现Chrome卡死的情况。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;去年因为VirtualBox与Fedora版本总是不兼容，一怒之下删除了使用了多年的Fedora，安装上Ubuntu14.04 TLS。Ubuntu用起来非常舒服，比Fedora流畅很多。&lt;/p&gt;
-&lt;p&gt;不过，用过一阵子之后发现当Chrome打开多个网页的时候，偶尔会出现系
-    
-    </summary>
-    
-      <category term="Engineer" scheme="http://harvey-ai.github.io/categories/Engineer/"/>
-    
-    
-      <category term="Chrome" scheme="http://harvey-ai.github.io/tags/Chrome/"/>
-    
-      <category term="Swap" scheme="http://harvey-ai.github.io/tags/Swap/"/>
     
   </entry>
   
