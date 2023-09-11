@@ -1,0 +1,132 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="Hello"><title>C语言程序设计二 | Wei's Words</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/normalize/latest/normalize.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/pure/latest/grids-responsive-min.min.css"><link rel="stylesheet" href="//lib.baomitu.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//lib.baomitu.com/jquery/latest/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//lib.baomitu.com/clipboard.js/latest/clipboard.min.js"></script><script type="text/javascript" src="//lib.baomitu.com/toastr.js/latest/toastr.min.js"></script><link rel="stylesheet" href="//lib.baomitu.com/toastr.js/latest/toastr.min.css"><meta name="generator" content="Hexo 6.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">C语言程序设计二</h1><a id="logo" href="/.">Wei's Words</a><p class="description"></p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> Home</i></a><a href="/archives/"><i class="fa fa-archive"> Archive</i></a><a href="/about/"><i class="fa fa-user"> About</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">C语言程序设计二</h1><div class="post-meta">2014-07-20<span> | </span><span class="category"><a href="/categories/Language/">Language</a></span></div><div class="post-content"><p>上一部分阐述了基本类型定义和控制流程，接下来接着介绍更复杂一些的语法——复杂类型和函数。</p>
+<h3 id="指针与复杂类型"><a href="#指针与复杂类型" class="headerlink" title="指针与复杂类型"></a><strong>指针与复杂类型</strong></h3><p>除了基本的整类型和小数类型，C提供了另外四种复杂类型：数组（array）、指针（point）、结构体（struct）和共用体（union），其中前三种使用频率较高，共用体比较少出现。</p>
+<h4 id="数组"><a href="#数组" class="headerlink" title="数组"></a><strong>数组</strong></h4><p>数组的声明通过在标识符后加中括号（[]）指定，数组元素的类型可以是其他任意类型，甚至是另一数组。<span style="color: #ff0000;">数组的存储空间连续，类型必须相同</span>，所以数组中元素的属性相同使得其常与循环一起使用。通过在中括号中指定数组下标取数组元素，数组下标从0开始。除了可以定义一维数组，还可以定义多维数组，子维度构成了父维度中的一个元素。</p>
+<p>和基本变量一样，数组也可以被初始化，初始化的方式是在{}添加初始化值，初始化值的个数要小于等于数组大小，编译器会按指定值顺序初始化数组元素。</p>
+<div style="padding-left: 60px;">
+<pre lang="c">int arr[10] = {0, 1, 2, 3}; /* 声明一个长度为10的整型数组，并初始化前3个元素 */
+int arr2[10][9] = { {0, 1, 2}, {0, 1, 2} }; /* 声明一个一维长度是10，二维长度是9的整型数组，并初始化arr2[0]，arr2[1]的前两个元素 */
+int a = arr[0]; /* 取出数组中第一个元素 */</pre>
+</div>
+
+<p>为了简洁，除了数组初始化、取数组元素和地址，C语言不提供与数组的任何操作，只能通过对数组元素进行操作。另一方面，数组名本质上是指向数组第一个元素的指针，如下所示。<span style="color: #ff0000;">与指针唯一不同的地方是：数组名是常量，指针是变量</span>。为了避免歧义，<span style="color: #ff0000;">在函数参数上，请用值针代替数组。</span>请看下面例子。</p>
+<div style="padding-left: 60px;">
+<pre lang="c">#include 
+void fun1(char b[20])
+{
+    printf("%d\n", sizeof(b));      // 奇怪，明明声明是数组，还是输出4
+}
+void fun2(char *b)
+{
+    printf("%d\n", sizeof(b));      // 输出4
+}
+int main()
+{
+    char a[] = "aaaaa";
+    fun1(a);
+    fun2(a);
+    printf("%d\n", sizeof(a));     // 输出5，
+    return 0;
+}</pre>
+</div>
+
+<h4 id="指针"><a href="#指针" class="headerlink" title="指针"></a><strong>指针</strong></h4><p>在语法层面上，<a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/%E7%BB%93%E6%9E%84%E5%8C%96%E7%BC%96%E7%A8%8B">结构化编程</a>摈弃了goto语句，不过在程序层面上，C语言却保留了具有同样性质的元素——指针，并且指针是多数语言没有的类型。由于是指针体现在程序层面上，虽然会增加程序员的思考难度，但没有给代码上增加复杂性，这样在没有增加代码混乱度的情况下，给程序员带来了很大的灵活性。与其他类型不同的是：指针和硬件相关。原则上，如果操作系统不阻拦，指针可以访问到系统任意地址的内容。取内容的方法通过解引用符号(*)。指针的大小也跟操作系统有关，通常情况下，32位操作系统指针占4个字节，64位操作系统指针占8个字节。</p>
+<p>指针的声明通过在标示符后添加“<em>”指定，取对象地址操作符时&amp;，“</em>”是解引用符，能取出地址中的对象。除此以外，还能对指针进行加减操作，在一块连续地址上的指针可以相减，指针可以与整数相加&#x2F;减。原则上，指针可以没有类型，<span style="color: #ff0000;">不过有了类型的指针使得加减操作将变的更加有意义</span>。</p>
+<div style="padding-left: 60px;">
+<pre lang="c">#include 
+int main()
+{
+    int a = 100, b = 1000;
+    int *p1 = &amp;a, *p2 = &amp;b;                /* p1指向a，p2指向b */
+    printf("p1-&gt;%d,p2-&gt;%d\n", *p1, *p2);   /* 打印p1, p2指向的内容 */
+    int arr[100];
+    p1 = arr, p2 = arr + 10;              /* p1指向arr第一个元素， p2第十个 */
+    printf("distance: %d\n", p2 - p1);    /* 结果为10，打印p2和p1的距离 */
+    return 0;
+}
+</pre>
+</div>
+
+<p>除了指向基本类型的指针，还有指向数组（就是指针）、结构体、函数等复杂结构的指针，凡是有地址都能指向。C语言还提供了一种特殊的指针空指针（void），在不知道类型的情况下，可以使用void指针。</p>
+<div style="padding-left: 60px;">
+<pre lang="c">int (*a)[10]; /* 指向一个包含10个元素的一维数组 */
+int (*fun) (int a, int b)； /* 指向一个含有两个参数，返回整数的函数 */
+</pre>
+</div>
+
+<h4 id="复杂类型声明"><a href="#复杂类型声明" class="headerlink" title="复杂类型声明"></a><strong>复杂类型声明</strong></h4><p>由于引入了函数指针的使用，使得定义变的非常混乱，很多时候会让人昏迷。由于解引用（*）的优先级比括号（()）的优先级低，所以要定义一个函数指针，一定要用括号将标示符和解引用结合起来，这样使得<span style="color: #ff0000;">有函数指针的声明不能从左向右阅读</span>。如以下代码所示：</p>
+<div style="padding-left: 60px;">
+<pre lang="c">int (*obj1)[10];                /* 指向一个长度为10的数组 */
+int *obj2[10];                  /* 指针数组 */
+int *obj3();                    /* 返回整数指针的函数 */
+int (*obj4)();                  /* 函数指针 */
+int (*obj5)(int a, int b);      /* 函数指针 */
+int (*(*obj6())[])();           /* 函数，返回指向一个复杂类型的指针，读者自己练习 */
+char (*(*obj7[10])())[5];       /* 指针数组，元素指向函数 读者自己练习 */
+</pre>
+</div>
+
+<p>那么如何阅读复杂类型的声明呢？C的声明语法式是递归形式的，包括dcl和direct-dcl，语法产生式如下：</p>
+<div style="padding-left: 60px;">
+<pre style="color: #000000;">dcl: optional *'s direct-dcl 
+direct-dcl： name
+             (dcl) 
+             direct-dcl()
+             direct-dcl[optional size]
+</pre>
+</div>
+
+<p>K &amp; R的书里给了一段简单的递归程序将声明转化为可读形式，不过不可能随时运行程序，比较靠谱的方法是：<span style="color: #ff0000;">从最内层开始解读，逐层脱掉括号，遇到星号便理解为指针，中括号为数组，括号对为函数，自右向左进行阅读，同时要注意结合顺序。</span>读者可按此法解读上面的复杂声明。</p>
+<h4 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a><strong>结构体</strong></h4><p>尽管C语言非常底层，C依然提供了简单的封装功能，结构体(struct)便是其中一员，可以将关系紧密的变量封装在一个struct中。结构体是C++的class的雏形，不过没有继承等OO特性，也没有公有、私有的概念，所有变量元素都是公有。</p>
+<p>struct可以封装任何类型的对象，甚至是自身类型（可以通过指针实现），同样为了简洁，C也仅仅支持拷贝、赋值、取地址、取成员四种操作，其他操作需要对成员进行操作。</p>
+<div style="padding-left: 60px;">
+<pre lang="c">struct student {      /* 声明一个“学生”类型，包含学生id和学生姓名, 并声明构造函数student() */
+    int id;
+    char *name;
+    student(int sid, char *sName)
+    {
+        id = sid;
+        strcpy(name, sName);
+    }
+};
+student haha(1, "haha"); /* 用前面声明的student类型定义学生“haha” */
+int studentId = haha.id; /* 取出haha的学生ID */
+student *sp = &amp;haha;     /* 取出haha的地址 */
+</pre>
+</div>
+
+<p>结构体还有一种特殊的节省空间定义——域（field），<span style="color: #ff0000;">由于与field所有的东西实现相关，所以是不可移植的，不推荐使用。</span></p>
+<h4 id="共用体"><a href="#共用体" class="headerlink" title="共用体"></a><strong>共用体</strong></h4><p>共用体使用频率很低，以关键字union开头，其他语法、操作和结构体一样，<span style="color: #ff0000;">本质上来说共用体是所有元素地址都没有偏移的结构体</span>，即从变量空间起始处开始共用内存，所以共用体的内存大小等于所有对象中最大一个对象所占空间的大小。显然，这样做的目的是为了节省空间，不过空用体的内容合法性需要程序员自己保证（又一次体现了C的哲学）。共用体最典型的使用场所是对齐操作，如以下代码所示：</p>
+<div style="padding-left: 60px;">
+<pre lang="c">typedef long Align;                /*以long类型的边界对齐*/
+union header {                     /*块的头部：*/
+   struct {
+        union header *ptr;         /*空闲块列表中的下一块*/
+        unsigned size;             /*本块的大小*/
+    }
+    Align x;                       /*强制块的对齐*/
+ }
+</pre>
+</div>
+
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a><strong>函数</strong></h3><p>虽然理论上说，没有函数也可以实现任何程序，但是函数的加入无疑给程序的简洁性、可移植性，以及代码复用性带来莫大的好处。增加函数的目的就是降低代码之间的耦合性，增加内聚。函数由返回值、函数名、参数和函数体构成，<span style="color: #ff0000;">任何函数都不能嵌套声明</span>，所以也可以理解为所有函数都是外部变量。通过参数作为输入、返回值作为输出与外界进行数据交换。</p>
+<div style="padding-left: 30px;">
+<pre>int fun(int arg)
+{
+    函数体
+    return 返回值;
+}
+</pre>
+</div>
+和使用变量一样，函数也需要声明，由于历史的原因，C语言一般由.h和.cpp文件构成，.h中包含了有外部链接属性的变量（包括函数），一般公用函数的声明需要放到这里，以便其他代码使用。
+
+<p>通过函数将程序中的变量分为外部变量（注意：不是指定extern便是外部变量，extern声明了外部链接属性，这和链接性有关）和内部变量，同名的内部变量会屏蔽外部变量，内部变量的语法可见性只存在函数内部，外部变量则是整个程序都可见。</p>
+<h3 id="预编译语法"><a href="#预编译语法" class="headerlink" title="预编译语法"></a><strong>预编译语法</strong></h3><p>以上阐述的各个部分都是在编译中的语法，C存在一些预编译阶段的处理。一共三种类型的预编译语法：宏展开，条件编译，包含语法。<a target="_blank" rel="noopener" href="http://115.28.13.176/blog/?p=772">了解更多</a>。</p>
+<ul>
+<li>宏展开，通过#define _identifier token-sequence__，_在预编译阶段_macro_将被替换成_text，_不过这里的替换是token级别的，如果macro存在字符串内部或标识符子串中是不会被替换。除了普通的宏，还有含参数宏替换和用于处理字符串的宏。</li>
+<li>条件编译，当程序会根据环境参数而变化时，最好的方法是使用条件编译。条件编译有很多种，但本质上都是#if…#endif，由于需要在预编译器执行，所以#if后面的参数一定需要在预编译器就能被评估的，如sizeof就不可以。</li>
+<li>包含语法，就是通常使用的#include，两种形式：#include “_header.h_”和#include &lt;<em>header.h</em>&gt;，前者会在本地和系统目录里查找，而后者只会在系统目录中查找header.h文件。被引入的文件会在预编译期展开，原则上可以包含任何文件，只要包含的文件符合C语法就可以（否则不能通过编译），不过最普通的用法是通过包含头文件引入变量和函数声明。<div style="padding-left: 30px;">
+<pre lang="c">#include</li>
+</ul>
+<p>#define myWord “this is my word!”<br>#define max(a, b) (a) &gt; (b) ? (a) : (b)<br>#define con(x, y) x ## y<br>#define HASWORD<br>int main()<br>{<br>    printf(“max(10, 11): %d\n”, max(10, 11));<br>    printf(“con(12, 13): %d\n”, con(12, 13));<br>#ifdef HASWORD<br>    printf(“myword: %s\n”, myWord);<br>#endif<br>#undef HASWORD<br>#ifdef HASWORD<br>    printf(“myword: %s\n”, myWord);<br>#else<br>    printf(“no words!\n”);<br>#endif<br>    return 0;<br>}<br></pre></p>
+</div>
+预编译之后的结果可以通过gcc -E得到，读者可以自行实验。</div><div class="tags"><ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/" rel="tag">C程序设计</a></li></ul></div><div class="post-nav"><a class="pre" href="/2014/07/20/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E4%B8%89/">C语言程序设计三</a><a class="next" href="/2014/07/18/C%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E4%B8%80/">C语言程序设计一</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="http://example.com"/></form></div><div class="widget"><div class="author-info"><a class="info-avatar" href="/about/" title="About"><img class="nofancybox" src="/img/avatar.png"/></a><p>To be a better man.</p><a class="info-icon" href="https://twitter.com/username" title="Twitter" target="_blank" style="margin-inline:5px"> <i class="fa fa-twitter-square" style="margin-inline:5px"></i></a><a class="info-icon" href="mailto:admin@domain.com" title="Email" target="_blank" style="margin-inline:5px"> <i class="fa fa-envelope-square" style="margin-inline:5px"></i></a><a class="info-icon" href="https://github.com/username" title="Github" target="_blank" style="margin-inline:5px"> <i class="fa fa-github-square" style="margin-inline:5px"></i></a><a class="info-icon" href="/atom.xml" title="RSS" target="_blank" style="margin-inline:5px"> <i class="fa fa-rss-square" style="margin-inline:5px"></i></a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Categories</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/">Algorithm</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Algorithm/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/">DevTool</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/DevTool/System/">System</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/">Engineer</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Language/">Language</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Operation/">Operation</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Engineer/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Entertainment/">Entertainment</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Language/">Language</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Language/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Life/">Life</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Life/Science/">Science</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/">Literature</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Literature/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Math/">Math</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Music/">Music</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/">Operation</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Operation/Repost/">Repost</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Poem/">Poem</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Repost/">Repost</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Science/">Science</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Social-training/">Social training</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/System/">System</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/ACM/" style="font-size: 15px;">ACM</a> <a href="/tags/JOJ/" style="font-size: 15px;">JOJ</a> <a href="/tags/2007/" style="font-size: 15px;">2007</a> <a href="/tags/%E5%B9%B4%E5%BA%A6%E6%80%BB%E7%BB%93/" style="font-size: 15px;">年度总结</a> <a href="/tags/%E6%9C%80%E9%95%BF%E9%80%92%E5%A2%9E%E5%AD%90%E5%BA%8F%E5%88%97/" style="font-size: 15px;">最长递增子序列</a> <a href="/tags/%E8%80%83%E7%A0%94/" style="font-size: 15px;">考研</a> <a href="/tags/2012/" style="font-size: 15px;">2012</a> <a href="/tags/%E6%9A%91%E5%81%87/" style="font-size: 15px;">暑假</a> <a href="/tags/%E7%BC%96%E7%A8%8B%E4%B9%8B%E7%BE%8E/" style="font-size: 15px;">编程之美</a> <a href="/tags/%E6%98%A5%E8%8A%82/" style="font-size: 15px;">春节</a> <a href="/tags/%E5%AF%92%E5%81%87%E8%AE%A1%E5%88%92/" style="font-size: 15px;">寒假计划</a> <a href="/tags/BAT/" style="font-size: 15px;">BAT</a> <a href="/tags/CentOS/" style="font-size: 15px;">CentOS</a> <a href="/tags/grub/" style="font-size: 15px;">grub</a> <a href="/tags/ARP/" style="font-size: 15px;">ARP</a> <a href="/tags/C/" style="font-size: 15px;">C</a> <a href="/tags/Class/" style="font-size: 15px;">Class</a> <a href="/tags/Codeforce/" style="font-size: 15px;">Codeforce</a> <a href="/tags/%E8%99%9A%E5%87%BD%E6%95%B0/" style="font-size: 15px;">虚函数</a> <a href="/tags/C%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/" style="font-size: 15px;">C程序设计</a> <a href="/tags/Fedora/" style="font-size: 15px;">Fedora</a> <a href="/tags/yum/" style="font-size: 15px;">yum</a> <a href="/tags/Fedora%E7%B3%BB%E7%BB%9F%E5%8D%87%E7%BA%A7/" style="font-size: 15px;">Fedora系统升级</a> <a href="/tags/HTML/" style="font-size: 15px;">HTML</a> <a href="/tags/Javascript/" style="font-size: 15px;">Javascript</a> <a href="/tags/latex/" style="font-size: 15px;">latex</a> <a href="/tags/%E4%B8%AD%E6%96%87/" style="font-size: 15px;">中文</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/%E4%BF%A1%E5%8F%B7/" style="font-size: 15px;">信号</a> <a href="/tags/Linux%E5%8F%91%E8%A1%8C%E7%89%88/" style="font-size: 15px;">Linux发行版</a> <a href="/tags/Fedora%E6%9B%B4%E6%96%B0/" style="font-size: 15px;">Fedora更新</a> <a href="/tags/Cygwin/" style="font-size: 15px;">Cygwin</a> <a href="/tags/MinGW/" style="font-size: 15px;">MinGW</a> <a href="/tags/MSYS/" style="font-size: 15px;">MSYS</a> <a href="/tags/Mysql/" style="font-size: 15px;">Mysql</a> <a href="/tags/Nuth/" style="font-size: 15px;">Nuth</a> <a href="/tags/OpenGL/" style="font-size: 15px;">OpenGL</a> <a href="/tags/Oracle/" style="font-size: 15px;">Oracle</a> <a href="/tags/Postgre/" style="font-size: 15px;">Postgre</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" style="font-size: 15px;">数据结构</a> <a href="/tags/RMQ/" style="font-size: 15px;">RMQ</a> <a href="/tags/TopCoder/" style="font-size: 15px;">TopCoder</a> <a href="/tags/SRM/" style="font-size: 15px;">SRM</a> <a href="/tags/DP/" style="font-size: 15px;">DP</a> <a href="/tags/%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8/" style="font-size: 15px;">测试驱动</a> <a href="/tags/%E8%B4%AA%E5%BF%83/" style="font-size: 15px;">贪心</a> <a href="/tags/TCO/" style="font-size: 15px;">TCO</a> <a href="/tags/Chrome/" style="font-size: 15px;">Chrome</a> <a href="/tags/Swap/" style="font-size: 15px;">Swap</a> <a href="/tags/spawning/" style="font-size: 15px;">spawning</a> <a href="/tags/VC/" style="font-size: 15px;">VC</a> <a href="/tags/VS/" style="font-size: 15px;">VS</a> <a href="/tags/%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E8%B7%AF%E5%BE%84/" style="font-size: 15px;">默认安装路径</a> <a href="/tags/yii/" style="font-size: 15px;">yii</a> <a href="/tags/Dev-C/" style="font-size: 15px;">Dev-C++</a> <a href="/tags/Operator/" style="font-size: 15px;">Operator</a> <a href="/tags/Ulimit/" style="font-size: 15px;">Ulimit</a> <a href="/tags/%E4%B8%AA%E4%BA%BA%E8%AE%A1%E5%88%92/" style="font-size: 15px;">个人计划</a> <a href="/tags/%E6%B3%95%E5%BE%8B/" style="font-size: 15px;">法律</a> <a href="/tags/%E4%BA%8C%E5%88%86%E6%B3%95/" style="font-size: 15px;">二分法</a> <a href="/tags/%E5%9C%86%E5%85%AC%E5%88%87%E7%BA%BF/" style="font-size: 15px;">圆公切线</a> <a href="/tags/%E5%A4%9A%E8%BE%B9%E5%BD%A2/" style="font-size: 15px;">多边形</a> <a href="/tags/%E5%BE%AA%E7%8E%AF%E4%B8%8D%E5%8F%98%E5%BC%8F/" style="font-size: 15px;">循环不变式</a> <a href="/tags/%E6%95%85%E4%B9%A1/" style="font-size: 15px;">故乡</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 15px;">随笔</a> <a href="/tags/Apache/" style="font-size: 15px;">Apache</a> <a href="/tags/BSD/" style="font-size: 15px;">BSD</a> <a href="/tags/GPL/" style="font-size: 15px;">GPL</a> <a href="/tags/LGPL/" style="font-size: 15px;">LGPL</a> <a href="/tags/MIT/" style="font-size: 15px;">MIT</a> <a href="/tags/%E9%81%A8%E6%B8%B8/" style="font-size: 15px;">遨游</a> <a href="/tags/%E7%AF%AE%E7%90%83/" style="font-size: 15px;">篮球</a> <a href="/tags/%E6%95%B0%E8%AE%BA/" style="font-size: 15px;">数论</a> <a href="/tags/%E6%A2%A6/" style="font-size: 15px;">梦</a> <a href="/tags/%E5%85%A8%E7%90%83%E9%80%9A%E5%8F%B2/" style="font-size: 15px;">全球通史</a> <a href="/tags/%E4%B8%8D%E5%AE%8C%E5%A4%87%E5%AE%9A%E7%90%86/" style="font-size: 15px;">不完备定理</a> <a href="/tags/%E5%AE%BF%E5%91%BD%E8%AE%BA/" style="font-size: 15px;">宿命论</a> <a href="/tags/%E7%BA%A6%E7%91%9F%E5%A4%AB/" style="font-size: 15px;">约瑟夫</a> <a href="/tags/%E6%95%99%E5%B8%88/" style="font-size: 15px;">教师</a> <a href="/tags/%E5%86%85%E5%AD%98/" style="font-size: 15px;">内存</a> <a href="/tags/%E9%87%8E%E5%A4%96%E6%B1%82%E7%94%9F/" style="font-size: 15px;">野外求生</a> <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/" style="font-size: 15px;">动态规划</a> <a href="/tags/%E7%9F%A9%E9%98%B5/" style="font-size: 15px;">矩阵</a> <a href="/tags/ACM-Fellow/" style="font-size: 15px;">ACM Fellow</a> <a href="/tags/%E5%90%89%E4%BB%96/" style="font-size: 15px;">吉他</a> <a href="/tags/%E5%90%89%E5%A4%A7%E8%AE%A1%E7%AE%97%E6%9C%BA/" style="font-size: 15px;">吉大计算机</a> <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 15px;">人工智能</a> <a href="/tags/%E5%9B%9E%E6%9C%94/" style="font-size: 15px;">回朔</a> <a href="/tags/%E8%AF%AD%E8%A8%80/" style="font-size: 15px;">语言</a> <a href="/tags/%E6%84%9F%E5%86%92/" style="font-size: 15px;">感冒</a> <a href="/tags/%E6%89%BE%E5%B7%A5%E4%BD%9C/" style="font-size: 15px;">找工作</a> <a href="/tags/Subset/" style="font-size: 15px;">Subset</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/" style="font-size: 15px;">字符串</a> <a href="/tags/%E8%AF%B4%E4%B9%A6%E4%BA%BA/" style="font-size: 15px;">说书人</a> <a href="/tags/%E5%B9%B6%E6%9F%A5%E9%9B%86/" style="font-size: 15px;">并查集</a> <a href="/tags/%E5%BD%92%E4%B9%A1/" style="font-size: 15px;">归乡</a> <a href="/tags/%E5%8F%A3%E6%89%8D%E8%AE%AD%E7%BB%83/" style="font-size: 15px;">口才训练</a> <a href="/tags/%E6%B7%B7/" style="font-size: 15px;">混</a> <a href="/tags/%E4%BA%BA%E7%94%9F%E8%AE%A1%E5%88%92/" style="font-size: 15px;">人生计划</a> <a href="/tags/%E5%A4%A7%E5%AD%A6%E5%90%8C%E5%AD%A6/" style="font-size: 15px;">大学同学</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Recent</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2022/05/31/%E4%BA%BA%E7%94%9F%E5%A6%82%E7%BA%B8%E7%89%87/">人生如纸片</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/11/%E5%90%AC%E6%9D%8E%E8%88%AA%E5%8D%9A%E5%A3%AB%E5%8C%97%E5%A4%A7%E6%BC%94%E8%AE%B2%E6%9C%89%E6%84%9F/">听李航博士北大演讲有感</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/19/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%A2%A6/">记一次梦</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/21/%E5%86%99%E4%BB%A3%E7%A0%81%EF%BC%8C%E5%85%BB%E6%88%90%E5%A5%BD%E4%B9%A0%E6%83%AF/">写代码，养成好习惯。</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/02/18/%E4%B8%80%E4%B8%AA%E9%9D%A2%E8%AF%95%E9%A2%98/">一个面试题</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/01/04/2015%E5%B9%B4%E6%80%BB%E7%BB%93/">2015年总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/%E8%B5%A0%E4%BA%BA%E7%8E%AB%E7%91%B0%EF%BC%8C%E6%89%8B%E6%9C%89%E4%BD%99%E9%A6%99/">赠人玫瑰，手有余香</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/11/18/%E7%A7%8B%E6%99%A8/">秋晨</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/26/Srm667%20DIV2/">Srm667 DIV2</a></li><li class="post-list-item"><a class="post-list-link" href="/2015/09/06/%E7%A7%8B%E8%87%B3/">秋至</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Links</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2023 <a href="/." rel="nofollow">Wei's Words.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.js"></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0"></script><link rel="stylesheet" type="text/css" href="//lib.baomitu.com/fancybox/latest/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js?v=1.0.0" successtext="Copy Successed!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css?v=1.0.0"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
